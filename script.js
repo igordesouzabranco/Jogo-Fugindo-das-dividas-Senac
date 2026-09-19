@@ -417,8 +417,7 @@ function makeCard(){
 
   if(S.day===1&&!S.salaryDone){
     S.salaryDone=true;
-    const daySalary=S.mode==="hardcore"?80:S.mode==="dificil"?120:200;
-    apply({food:3,inv:3},0,daySalary);
+    apply({food:3,inv:3},0);
     render();
     setTimeout(()=>{
       render();
@@ -561,6 +560,8 @@ function applyTheme(theme){
   if(theme==="light")document.body.classList.add("theme-light");
 }
 
+$("look").onchange=()=>$("avatar").innerHTML='<i class="'+$("look").value+'"></i>';
+
 function getPlayedUsers(){
   try{return JSON.parse(localStorage.getItem("fugindo_played")||"[]")}catch(e){return[]}
 }
@@ -611,6 +612,7 @@ function startGame(){
   onSwipeDeny=null;
   permanentGainMul=1;
   permanentCostMul=1;
+  $("gameAvatar").innerHTML='<i class="'+S.look+'"></i>';
   show("game");
   initSwipe();
   makeCard();
@@ -645,6 +647,7 @@ $("registerBtn").onclick=()=>{
     nickname:name.split(" ")[0],
     turma:turma,
     email:email,
+    look:$("look").value,
     money:mode==="hardcore"?200:mode==="dificil"?400:800,lazer:mode==="hardcore"?20:mode==="dificil"?40:60,food:mode==="hardcore"?20:mode==="dificil"?40:60,inv:mode==="hardcore"?20:mode==="dificil"?30:40,day:1,
     debt:false,tiger:0,tigerCooldown:0,salaryDone:false,
     difficulty:mode==="hardcore"?3:mode==="dificil"?1.5:1,

@@ -41,10 +41,20 @@
       <div class="field"><label>Turma SENAC</label><input id="turma" maxlength="20" placeholder="Ex: ADS 2025"></div>
     </div>
     <div class="field" style="margin-top:10px"><label>Email</label><input id="email" type="email" placeholder="seu@email.com"></div>
-    <div class="field" style="margin-top:10px">
-      <label>Tema</label><select id="themeSelect">
+    <div class="grid" style="margin-top:10px">
+      <div class="field"><label>Visual</label><select id="look">
+        <option value="fa-solid fa-user">👤 Pessoa</option>
+        <option value="fa-solid fa-user-graduate">🎓 Estudante</option>
+        <option value="fa-solid fa-user-tie">👔 Trabalhador</option>
+        <option value="fa-solid fa-user-astronaut">🚀 Astronauta</option>
+        <option value="fa-solid fa-robot">🤖 Robô</option>
+        <option value="fa-solid fa-mask">🎭 Máscara</option>
+        <option value="fa-solid fa-hat-wizard">🧙 Mago</option>
+        <option value="fa-solid fa-cat">🐱 Gato</option>
+      </select></div>
+      <div class="field"><label>Tema</label><select id="themeSelect">
         <option value="dark">Escuro</option><option value="light">Claro</option>
-      </select>
+      </select></div>
     </div>
     <div id="regError" class="reg-error"></div>
     <button class="btn primary full" id="registerBtn" style="margin-top:14px">Jogar →</button>
@@ -53,7 +63,10 @@
 
 <section id="game" class="screen">
   <div class="top">
-    <div><div class="day" id="day">DIA 1/30</div><div class="money" id="money">R$ 800</div></div>
+    <div class="top-left">
+      <div class="game-avatar" id="gameAvatar"><i class="fa-solid fa-user"></i></div>
+      <div><div class="day" id="day">DIA 1/30</div><div class="money" id="money">R$ 800</div></div>
+    </div>
     <span class="tag" id="mood">Sobrevivendo</span>
   </div>
 
