@@ -1,28 +1,30 @@
 # AGENTS.md
 
-## Visão Geral
-**Fugindo das Dívidas** — Jogo educativo de simulação de sobrevivência financeira. O jogador gerencia R$ 800 durante 30 dias, tomando decisões que afetam lazer, alimentação e investimentos.
+## Visao Geral
+**Fugindo das Dividas** — Jogo educativo de simulacao de sobrevivencia financeira. O jovem aprendiz gerencia R$ 300 durante 30 dias, tomando decisoes que afetam lazer, alimentacao e investimentos.
 
 ## Tecnologia
 - HTML5 + CSS3 + JavaScript (Vanilla JS)
-- Sem frameworks ou dependências externas
-- Google Fonts (Inter) como única CDN
-- Arquivo estático — basta abrir `index.html` no navegador
+- Font Awesome 6.5.1 (icones)
+- Google Fonts (Inter)
+- Arquivo estatico — basta abrir `index.html` no navegador
 
 ## Estrutura do Projeto
 ```
 jogosenac/
-├── index.html    # Estrutura HTML (3 telas: start, game, end)
-├── script.js     # Toda a lógica do jogo (~484 linhas)
-├── styles.css    # Estilização dark mode com animações
+├── index.html    # Estrutura HTML (3 telas: start, register, game, end)
+├── script.js     # Toda a logica do jogo
+├── styles.css    # Estilizacao dark mode com animacoes
+├── tigrinho.jpg  # Imagem do Tigrinho
 └── AGENTS.md     # Este arquivo
 ```
 
-## Arquitetura do Código
+## Arquitetura do Codigo
 
 ### Telas (Screens)
-O jogo usa 3 `<section>` com classes CSS para controle de visibilidade:
-- `#start` — Tela inicial (criação de personagem + botão iniciar)
+O jogo usa 4 `<section>` com classes CSS para controle de visibilidade:
+- `#start` — Tela inicial (botao iniciar)
+- `#register` — Cadastro (nome, turma, email, tema)
 - `#game` — Tela principal (cards, stats, barras)
 - `#end` — Tela de fim de jogo (resultado + LinkedIn CTA)
 
@@ -33,42 +35,55 @@ Objeto global com:
 ```js
 S = {
   name: string,      // Nome do personagem
-  money: number,     // Dinheiro disponível (começa com 800)
-  lazer: number,     // Status de lazer (0-100, começa 60)
-  food: number,      // Status de alimentação (0-100, começa 60)
-  inv: number,       // Status de investimentos (0-100, começa 40)
+  nickname: string,  // Primeiro nome (usado internamente)
+  money: number,     // Dinheiro disponivel (comeca com 300)
+  lazer: number,     // Status de lazer (0-100, comeca 60)
+  food: number,      // Status de alimentacao (0-100, comeca 60)
+  inv: number,       // Status de investimentos (0-100, comeca 40)
   day: number,       // Dia atual (1-30)
-  debt: boolean,     // Se tem dívida ativa
-  tiger: number,     // Cartas obrigatórias restantes do Tigrinho
-  tigerCooldown: number, // Cooldown após ignorar Tigrinho
-  salaryDone: boolean // Se já recebeu o primeiro salário
+  debt: boolean,     // Se tem divida ativa
+  tiger: number,     // Cartas obrigatorias restantes do Tigrinho
+  tigerCooldown: number, // Cooldown apos ignorar Tigrinho
+  salaryDone: boolean // Se ja recebeu o primeiro salario
 }
 ```
 
+### Multiplicadores Permanentes
+Apos certos eventos (Tigrinho), multiplicadores afetam todos os custos/ganhos:
+- `permanentGainMul` — Reduz ganhos (ex: 0.85 = -15%)
+- `permanentCostMul` — Aumenta gastos (ex: 1.2 = +20%)
+
 ### Cards
-- Array `cards[]` com ~50 opções categorizadas
-- Cada card tem: título, descrição, custo, efeitos nos stats, e evento secreto opcional
-- Cards fixos nos dias 7 (luz), 15 (aluguel), 22 (transporte)
-- Dia 1: salário automático de R$ 800
+- Array `cards[]` com ~30 opcoes categorizadas
+- Cada card tem: titulo, descricao, custo, efeitos nos stats, e evento secreto opcional
+- Cards fixos nos dias 7 (luz), 15 (ajuda em casa), 22 (transporte)
+- Dia 1: salario automatico de R$ 150
+- Custos realistas para jovem de 16 anos no RS
+
+### Eventos Especiais (specialEvents)
+Array com 10 eventos obrigatorios que podem ser ativados aleatoriamente:
+- Golpe do Pix, Emprestimo Fantasma, Promocao Golpista
+- Pediu pra Mae, Clonaram Cartao, Celular Roubado
+- Material Escolar, Aniversario do Amigo, Vale Refeicao Estourado
+
+Cada evento tem: `gainMul`, `costMul` (apenas durante o evento) e `penalty` (ao final).
 
 ### Sistema de Swipe
 - `initSwipe()` configura listeners de touch/mouse no card
-- `onStart` → `onMove` → `onEnd` processam o arrasto
+- `onStart` -> `onMove` -> `onEnd` processam o arrasto
 - Threshold: 100px para aceitar/negar
-- **Importante**: `initSwipe()` remove listeners antigos antes de adicionar novos (evita memory leak)
-- Variáveis `_prev*` guardam referências dos listeners para cleanup
 
-### Condições de Fim de Jogo
-**Derrota** (função `check()`):
-- Lazer ≤ 0
-- Alimentação ≤ 0
-- Investimentos ≤ 0
+### Condicoes de Fim de Jogo
+**Derrota** (funcao `check()`):
+- Lazer <= 0
+- Alimentacao <= 0
+- Investimentos <= 0
 - Dinheiro < 0
 
-**Vitoria** (função `nextDay()`):
-- Dia 30 E lazer > 50 E alimentação > 50 E investimentos > 50
+**Vitoria** (funcao `nextDay()`):
+- Dia 30 E lazer > 50 E alimentacao > 50 E investimentos > 50
 
-## Convenções de Código
+## Convencoes de Codigo
 
 ### JavaScript
 - IIFE auto-invocada `(()=>{ ... })()` para escopo isolado
@@ -77,21 +92,17 @@ S = {
 - `money(n)` = formata para "R$ X"
 - `S_(msg, e, g)` = helper para eventos secretos
 - `SC(chance, good, bad)` = helper para chance de evento secreto
-- Sem `let`/`const` desnecessários — reutiliza variáveis do escopo
-- Sem comments no código (convenção do projeto)
 
 ### CSS
-- Variáveis CSS em `:root` para cores e dimensões
+- Variaveis CSS em `:root` para cores e dimensoes
 - Tema dark com accent dourado (#facc15)
-- Animações via `@keyframes` (shimmer, float, confetti, etc.)
-- Bordas arredondadas (border-radius: 16-20px)
-- Glassmorphism sutil nos cards e painéis
+- Animacoes via `@keyframes`
 - Responsive: `@media(max-width:380px)` para telas pequenas
 
 ### HTML
-- Semântica mínima (main, section, div)
+- Semantica minima (main, section, div)
 - IDs descritivos: `startBtn`, `lazerB`, `foodB`, `invB`
-- Emoji como ícones (sem biblioteca de ícones)
+- Font Awesome para todos os icones (sem emojis)
 
 ## Como Rodar
 ```bash
@@ -105,21 +116,22 @@ python -m http.server 8000
 
 ## Cuidados ao Editar
 
-1. **initSwipe()**: Sempre limpa listeners antigos. Se adicionar novos event listeners, siga o mesmo padrão com variáveis `_prev*`.
+1. **initSwipe()**: Sempre limpa listeners antigos.
 
-2. **Cards**: Ao adicionar cards ao array `cards[]`, manter a estrutura: `{t, d, c, e, gain?, secret?}`. O campo `gain` é para cards que dão dinheiro (trabalho/renda).
+2. **Cards**: Ao adicionar cards ao array `cards[]`, manter a estrutura: `{t, d, c, e, gain?, secret?}`.
 
-3. **Eventos fixos**: Dias 1, 7, 15, 22 têm eventos especiais. Não alterar sem verificar a lógica em `makeCard()`.
+3. **Eventos fixos**: Dias 1, 7, 15, 22 tem eventos especiais. Nao alterar sem verificar `makeCard()`.
 
-4. **Card forçado (Tigrinho)**: Cards com `forced:true` não podem ser negados. O callback de deny é `null`.
+4. **Card forcado (Tigrinho)**: Cards com `forced:true` nao podem ser negados.
 
-5. **LinkedIn**: URL do LinkedIn está na função `finish()`. Atualizar se necessário.
+5. **Icones**: Usar sempre Font Awesome (`<i class="fa-solid fa-xxx"></i>`), nunca emojis.
 
 ## Funcionalidades Principais
 - Sistema de swipe (touch + mouse)
 - Eventos secretos com % de chance
 - Evento especial "Tigrinho" (10% chance, a partir do dia 4)
-- Sistema de dívida (não pagar aluguel no dia 15)
+- Sistema de divida (nao pagar ajudade no dia 15)
+- Multiplicadores permanentes apos Tigrinho
+- 10 eventos especiais variados
 - Confetti ao vencer
 - Toast notifications para eventos secretos
-- Partículas flutuantes na tela inicial

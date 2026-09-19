@@ -18,31 +18,31 @@ let permanentGainMul=1;
 let permanentCostMul=1;
 
 const specialEvents=[
-  {id:"golpe_pix",name:"Golpe do Pix",emoji:"💳",mandatory:2,
+  {id:"golpe_pix",name:"Golpe do Pix",emoji:'<i class="fa-solid fa-credit-card"></i>',mandatory:2,
    msg:"Caiu um pix fantasma na sua conta. Agora tu ta devendo R$ 80 e as proximas 2 cartas sao obrigatorias.",
    desc:"Alguem transferiu um pix errado pra tua conta e agora quer o dinheiro de volta — com juros.",cost:80,penalty:{lazer:-20,food:-20,inv:-20},gainMul:0.7,costMul:1.4},
-  {id:"emprestimo_fantasma",name:"Emprestimo Fantasma",emoji:"📱",mandatory:2,
+  {id:"emprestimo_fantasma",name:"Emprestimo Fantasma",emoji:'<i class="fa-solid fa-mobile-screen"></i>',mandatory:2,
    msg:"Um app pegou seus dados e fez um emprestimo no seu nome. Tu nao pediu mas vai pagar.",
    desc:"Notificacao: \"Emprestimo aprovado! R$ 100 na conta.\" Mas o app ja comecou a cobrar.",cost:100,penalty:{lazer:-25,food:-25,inv:-25},gainMul:0.75,costMul:1.35},
-  {id:"promocao_fake",name:"Promocao Golpista",emoji:"🏷️",mandatory:1,
+  {id:"promocao_fake",name:"Promocao Golpista",emoji:'<i class="fa-solid fa-tag"></i>',mandatory:1,
    msg:"50% OFF em tudo! Clicou e o app descontou R$ 50 de uma assinatura que tu nao assinou.",
    desc:"Oferta relampago que parecia boa demais. Era. Cobre assinatura fantasma.",cost:50,penalty:{lazer:-15,food:-15,inv:-15},gainMul:0.8,costMul:1.25},
-  {id:"divida_familiar",name:"Pediu pra Mae",emoji:"👩",mandatory:1,
+  {id:"divida_familiar",name:"Pediu pra Mae",emoji:'<i class="fa-solid fa-user"></i>',mandatory:1,
    msg:"Sua mae emprestou R$ 40 mas disse que vai cobrar todo dia ate voltar. E ainda te xingou.",
    desc:"Divida familiar. Nao tem app que resolva. Paga ou perde o almoco de domingo.",cost:40,penalty:{lazer:-15,food:-15,inv:-15},gainMul:0.85,costMul:1.2},
-  {id:"clonagem_cartao",name:"Clonaram teu Cartao",emoji:"💳",mandatory:2,
+  {id:"clonagem_cartao",name:"Clonaram teu Cartao",emoji:'<i class="fa-solid fa-credit-card"></i>',mandatory:2,
    msg:"Compra suspeita de R$ 150. Seu cartao foi clonado!",
    desc:"Notificacao do banco: \"Compra aprovada em Florianopolis.\" Tu ta no Senac.",cost:150,penalty:{lazer:-25,food:-20,inv:-20},gainMul:0.65,costMul:1.45},
-  {id:"celular_roubado",name:"Celular Roubado",emoji:"📱",mandatory:2,
+  {id:"celular_roubado",name:"Celular Roubado",emoji:'<i class="fa-solid fa-mobile-screen"></i>',mandatory:2,
    msg:"Te arrancaram o celular na saida do Senac. Sem volta.",
    desc:"Tu tava tranquilo e do nada um cara pegou teu celular e saiu correndo. Policia nao vai fazer nada.",cost:120,penalty:{lazer:-25,food:-15,inv:-20},gainMul:0.7,costMul:1.4},
-  {id:"material_escolar",name:"Material Escolar Emergencial",emoji:"📚",mandatory:1,
+  {id:"material_escolar",name:"Material Escolar Emergencial",emoji:'<i class="fa-solid fa-book"></i>',mandatory:1,
    msg:"Caderno acabou, caneta estourou e o livro didatico precisa ser trocado.",
    desc:"Mes de provas e o material nao aguenta mais. Comprar tudo de uma vez pesa no bolso.",cost:60,penalty:{lazer:-10,food:-15,inv:-10},gainMul:0.85,costMul:1.3},
-  {id:"aniversario_amigo",name:"Aniversario do Amigo",emoji:"🎂",mandatory:1,
+  {id:"aniversario_amigo",name:"Aniversario do Amigo",emoji:'<i class="fa-solid fa-cake-candles"></i>',mandatory:1,
    msg:"Teu melhor amigo ta fazendo aniversario. Presente, transporte e contribuicao pra festa.",
    desc:"Amizade e carissima. Mas tu nao pode faltar no aniversario do parça.",cost:55,penalty:{lazer:-15,food:-10,inv:-10},gainMul:0.85,costMul:1.25},
-  {id:"vale_refeicao_estourado",name:"Vale Refeicao Estourado",emoji:"🍽️",mandatory:1,
+  {id:"vale_refeicao_estourado",name:"Vale Refeicao Estourado",emoji:'<i class="fa-solid fa-utensils"></i>',mandatory:1,
    msg:"Gastou todo o vale refeicao na segunda. Restante do mes sem comida decente.",
    desc:"Marmita de R$ 10 todo dia saindo do bolso. OVR nao cobre mais nada.",cost:50,penalty:{lazer:-10,food:-25,inv:-10},gainMul:0.85,costMul:1.25}
 ];
@@ -150,11 +150,11 @@ function render(){
     $(id+"B").style.width=v+"%";
   });
   const tags=[];
-  if(S.debt)tags.push('<span class="effect neg">💸 Dívida ativa</span>');
-  if(S.tiger>0)tags.push('<span class="effect neg">'+tigrinho+' '+S.tiger+' cartas obrigatórias</span>');
-  if(consecutiveDenies>=2)tags.push('<span class="effect neg">🔄 '+consecutiveDenies+' negativas seguidas</span>');
-  if(permanentGainMul<1)tags.push('<span class="effect neg">📉 Ganhos -'+Math.round((1-permanentGainMul)*100)+'%</span>');
-  if(permanentCostMul>1)tags.push('<span class="effect neg">📈 Gastos +'+Math.round((permanentCostMul-1)*100)+'%</span>');
+  if(S.debt)tags.push('<span class="effect neg"><i class="fa-solid fa-money-bill-wave"></i> Divida ativa</span>');
+  if(S.tiger>0)tags.push('<span class="effect neg">'+tigrinho+' '+S.tiger+' cartas obrigatorias</span>');
+  if(consecutiveDenies>=2)tags.push('<span class="effect neg"><i class="fa-solid fa-rotate"></i> '+consecutiveDenies+' negativas seguidas</span>');
+  if(permanentGainMul<1)tags.push('<span class="effect neg"><i class="fa-solid fa-arrow-trend-down"></i> Ganhos -'+Math.round((1-permanentGainMul)*100)+'%</span>');
+  if(permanentCostMul>1)tags.push('<span class="effect neg"><i class="fa-solid fa-arrow-trend-up"></i> Gastos +'+Math.round((permanentCostMul-1)*100)+'%</span>');
   $("debuffs").innerHTML=tags.join("");
   const moodText=S.money<30?"Tá foda":S.money<80?"Apertando":S.money<150?"Se virando":"Tranquilo";
   $("mood").textContent=moodText+(S.nickname?", "+S.nickname:"");
@@ -188,20 +188,21 @@ function finish(reason){
   const player=S.nickname||S.name.split(" ")[0];
   $("endPanel").innerHTML=
     '<span class="tag">'+(win?"MÊS CONCLUÍDO":"FIM DE JOGO")+'</span>'+
-    '<h2>'+(win?"Passou direto, "+player+"! 🎉":"Game over")+"</h2>"+
+    '<h2>'+(win?"Passou direto, "+player+"!": "Game over")+"</h2>"+
     "<p>"+S.name+" ("+S.turma+") terminou com <b>"+money(S.money)+"</b>.</p>"+
-    (S.mode?'<p><span class="diff-badge '+S.mode+'">'+(S.mode==="hardcore"?"🔥 HARDCORE":"⚡ DIFÍCIL")+'</span></p>':"")+
+    (S.mode?'<p><span class="diff-badge '+S.mode+'">'+(S.mode==="hardcore"?'<i class="fa-solid fa-fire"></i> HARDCORE':'<i class="fa-solid fa-bolt"></i> DIFICIL")+'</span></p>':"")+
     '<div class="stats-summary">'+
-      '<div class="stat-item"><span class="stat-val">🎮 '+Math.round(S.lazer)+'</span><span class="stat-label">Lazer</span></div>'+
-      '<div class="stat-item"><span class="stat-val">🍛 '+Math.round(S.food)+'</span><span class="stat-label">Alimentação</span></div>'+
-      '<div class="stat-item"><span class="stat-val">📈 '+Math.round(S.inv)+'</span><span class="stat-label">Investimentos</span></div>'+
+      '<div class="stat-item"><span class="stat-val"><i class="fa-solid fa-gamepad"></i> '+Math.round(S.lazer)+'</span><span class="stat-label">Lazer</span></div>'+
+      '<div class="stat-item"><span class="stat-val"><i class="fa-solid fa-utensils"></i> '+Math.round(S.food)+'</span><span class="stat-label">Alimentacao</span></div>'+
+      '<div class="stat-item"><span class="stat-val"><i class="fa-solid fa-chart-line"></i> '+Math.round(S.inv)+'</span><span class="stat-label">Investimentos</span></div>'+
     '</div>'+
     "<p>"+(win?"Deu tudo certo. Equilibrou tudo durante 30 dias. Manda bem!":reason)+"</p>"+
+    (!win&&S.mode==="hardcore"?'<p style="margin-top:12px;font-size:14px;color:#facc15;font-weight:700"><i class="fa-solid fa-fire"></i> Se voce perdeu no Hardcore, voce so tem SABOR aura <i class="fa-solid fa-fire"></i></p>':"")+
     '<div class="linkedin-cta">'+
-    '<span class="cta-icon">🤝</span>'+
-    '<p class="cta-title">E aí, curtiu?</p>'+
+    '<span class="cta-icon"><i class="fa-solid fa-handshake"></i></span>'+
+    '<p class="cta-title">E ai, curtiu?</p>'+
     '<p class="cta-text">Me segue no LinkedIn e conta o que achou! Sua opinião me ajuda demais.</p>'+
-    '<a href="https://www.linkedin.com/in/igor-de-souza-branco-b68630314/" target="_blank" rel="noopener" class="cta-btn">🔗 LinkedIn</a>'+
+    '<a href="https://www.linkedin.com/in/igor-de-souza-branco-b68630314/" target="_blank" rel="noopener" class="cta-btn"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>'+
     '</div>';
 }
 
@@ -281,15 +282,15 @@ function showTiger(){
   el.classList.remove("swiping","swipe-right","swipe-left");
   cardLocked=false;
   el.innerHTML=
-    '<div class="swipe-overlay accept">✓ ACEITAR</div>'+
-    '<div class="swipe-overlay deny">✗ NEGAR</div>'+
+    '<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> ACEITAR</div>'+
+    '<div class="swipe-overlay deny"><i class="fa-solid fa-xmark"></i> NEGAR</div>'+
     '<div class="card-content">'+
     '<span class="tag">EVENTO ESPECIAL</span>'+
     '<h3><img src="tigrinho.jpg" alt="Tigrinho" class="tigrinho-img big"> A carta do Tigrinho</h3>'+
-    '<p>Caiu uma notificação no celular. "Ganhe dinheiro fácil!" Será?</p>'+
-    '<div class="panel danger"><b>⚠️ Vasculha o bolso</b><p>Se aceitar, as próximas <b>3 cartas são obrigatórias</b> — sem recusa. Dá pra se recuperar depois, mas vai ser puxado.</p></div>'+
+    '<p>Caiu uma notificacao no celular. "Ganhe dinheiro facil!" Sera?</p>'+
+    '<div class="panel danger"><b><i class="fa-solid fa-triangle-exclamation"></i> Vasculha o bolso</b><p>Se aceitar, as proximas <b>3 cartas sao obrigatorias</b> — sem recusa. Da pra se recuperar depois, mas vai ser puxado.</p></div>'+
     '</div>'+
-    '<div class="swipe-hint"><span class="hint-left">← Negar</span><span class="hint-right">Aceitar →</span></div>';
+    '<div class="swipe-hint"><span class="hint-left"><i class="fa-solid fa-arrow-left"></i> Negar</span><span class="hint-right">Aceitar <i class="fa-solid fa-arrow-right"></i></span></div>';
 
   setSwipeCallbacks(function(){
     S.tiger=3;
@@ -306,7 +307,7 @@ function showTiger(){
 function showSecretToast(msg,isGood){
   const toast=document.createElement("div");
   toast.className="secret-toast "+(isGood?"good":"bad");
-  toast.innerHTML="<span>"+(isGood?"🍀":"💀")+"</span> "+msg;
+  toast.innerHTML="<span>"+(isGood?'<i class="fa-solid fa-clover"></i>':'<i class="fa-solid fa-skull"></i>')+"</span> "+msg;
   document.body.appendChild(toast);
   setTimeout(()=>toast.classList.add("show"),10);
   setTimeout(()=>{toast.classList.remove("show");setTimeout(()=>toast.remove(),400)},3500);
@@ -442,15 +443,15 @@ function renderCard(c){
   const canDeny=!c.fixed&&!c.forced;
 
   const effects=Object.entries(c.e||{}).map(([k,v])=>{
-    const n=k==="lazer"?"🎮 Lazer":k==="food"?"🍛 Alimentação":"📈 Investimentos";
+    const n=k==="lazer"?'<i class="fa-solid fa-gamepad"></i> Lazer':k==="food"?'<i class="fa-solid fa-utensils"></i> Alimentacao':'<i class="fa-solid fa-chart-line"></i> Investimentos';
     let dv=v;
     if(isHC)dv=v>0?Math.round(v*0.6):v<0?Math.round(v*1.4):v;
     return '<span class="effect '+(dv>=0?"pos":"neg")+'">'+(dv>=0?"+":"")+dv+" "+n+"</span>";
   }).join("");
 
   $("card").innerHTML=
-    (canAccept?'<div class="swipe-overlay accept">✓ ACEITAR</div>':'')+
-    (canDeny?'<div class="swipe-overlay deny">✗ NEGAR</div>':'')+
+    (canAccept?'<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> ACEITAR</div>':'')+
+    (canDeny?'<div class="swipe-overlay deny"><i class="fa-solid fa-xmark"></i> NEGAR</div>':'')+
     '<div class="card-content">'+
     '<span class="tag">DIA '+S.day+(c.fixed?" · EVENTO FIXO":c.forced?" · TIGRINHO":" · DECISÃO")+'</span>'+
     (S.mode?'<span class="diff-badge '+S.mode+'">'+(S.mode==="hardcore"?"HARDCORE":"DIFÍCIL")+'</span>':"")+
@@ -460,8 +461,8 @@ function renderCard(c){
     '</div>'+
     (canAccept||canDeny?
       '<div class="swipe-hint">'+
-      (canDeny?'<span class="hint-left">← Negar</span>':'<span class="hint-left"></span>')+
-      (canAccept?'<span class="hint-right">Aceitar →</span>':'<span class="hint-right"></span>')+
+      (canDeny?'<span class="hint-left"><i class="fa-solid fa-arrow-left"></i> Negar</span>':'<span class="hint-left"></span>')+
+      (canAccept?'<span class="hint-right">Aceitar <i class="fa-solid fa-arrow-right"></i></span>':'<span class="hint-right"></span>')+
       '</div>':'<p class="small">Carta obrigatória — arraste para a direita.</p>');
 
   setSwipeCallbacks(function(){
@@ -531,15 +532,11 @@ function renderCard(c){
   }:null);
 }
 
-$("look").onchange=()=>$("avatar").textContent=$("look").value;
+$("startBtn").onclick=()=>{show("register")};
 
 function applyTheme(theme){
   document.body.classList.remove("theme-light");
   if(theme==="light")document.body.classList.add("theme-light");
-}
-function applyAccent(color){
-  document.documentElement.style.setProperty("--user-accent",color);
-  document.body.classList.add("user-accent");
 }
 
 function getPlayedUsers(){
@@ -567,16 +564,16 @@ function showAurudoOverlay(name,mode,callback){
   const isHardcore=mode==="hardcore";
   ol.innerHTML=
     '<div class="aurudo-card'+(isHardcore?" hardcore":"")+'">'+
-    '<span class="aurudo-emoji">'+(isHardcore?"💀":"🔥")+'</span>'+
-    '<h2>'+(isHardcore?"VOCÊ É O MAIS AURUDO DO SENAC!":name+", tu é AURUDO!")+'</h2>'+
+    '<span class="aurudo-emoji">'+(isHardcore?'<i class="fa-solid fa-skull"></i>':'<i class="fa-solid fa-fire"></i>')+'</span>'+
+    '<h2>'+(isHardcore?"VOCÊ E O MAIS AURUDO DO SENAC!":name+", tu e AURUDO!")+'</h2>'+
     '<p>'+(isHardcore
-      ?"O nome tem 6767. Isso é lendário. Modo <b>Hardcore</b> desbloqueado."
-      :"O nome tem 67. Isso é rareza. Modo <b>Difícil</b> ativado.")+'</p>'+
-    '<div class="aurudo-mode">'+(isHardcore?"🔥 MODO HARDCORE 🔥":"⚡ MODO DIFÍCIL ⚡")+'</div>'+
+      ?"O nome tem 6767. Isso e lendario. Modo <b>Hardcore</b> desbloqueado."
+      :"O nome tem 67. Isso e rareza. Modo <b>Dificil</b> ativado.")+'</p>'+
+    '<div class="aurudo-mode">'+(isHardcore?'<i class="fa-solid fa-fire"></i> MODO HARDCORE <i class="fa-solid fa-fire"></i>':'<i class="fa-solid fa-bolt"></i> MODO DIFICIL <i class="fa-solid fa-bolt"></i>')+'</div>'+
     '<p style="margin-top:14px;font-size:12px;color:var(--ink-sec)">'+(isHardcore
-      ?"Custos ×3, ganhos cortados, stats começam em 20. Boa sorte."
-      :"Custos ×1.5, ganhos levemente reduzidos. Dá pra virar.")+'</p>'+
-    '<button class="btn primary full" style="margin-top:18px" id="aurudoContinue">Bora lá →</button>'+
+      ?"Custos x3, ganhos cortados, stats comecam em 20. Boa sorte."
+      :"Custos x1.5, ganhos levemente reduzidos. Da pra virar.")+'</p>'+
+    '<button class="btn primary full" style="margin-top:18px" id="aurudoContinue">Bora la</button>'+
     '</div>';
   document.body.appendChild(ol);
   ol.querySelector("#aurudoContinue").onclick=()=>{ol.remove();callback()};
@@ -597,24 +594,20 @@ function startGame(){
   makeCard();
 }
 
-$("startBtn").onclick=()=>{show("register")};
-
 $("registerBtn").onclick=()=>{
   const name=($("name").value||"").trim();
   const turma=($("turma").value||"").trim();
   const email=($("email").value||"").trim().toLowerCase();
-  const nickname=($("nickname").value||"").trim();
-  const favColor=$("favColor").value;
   const theme=$("themeSelect").value;
   const err=$("regError");
 
-  if(!name){err.textContent="Preenche o nome aí.";return}
+  if(!name){err.textContent="Preenche o nome ai.";return}
   if(!turma){err.textContent="Qual tua turma do SENAC?";return}
-  if(!email||!email.includes("@")){err.textContent="Email inválido, confere aí.";return}
-  if(nameHasNumbersExcept67(name)){err.textContent="Nome não pode ter número! Só letras.";return}
+  if(!email||!email.includes("@")){err.textContent="Email invalido, confere ai.";return}
+  if(nameHasNumbersExcept67(name)){err.textContent="Nome nao pode ter numero! So letras.";return}
 
   if(emailAlreadyPlayed(email)){
-    err.textContent="Esse email já jogou. Cada um só uma vez, mano.";
+    err.textContent="Esse email ja jogou. Cada um so uma vez, mano.";
     return;
   }
 
@@ -622,16 +615,14 @@ $("registerBtn").onclick=()=>{
   err.textContent="";
 
   applyTheme(theme);
-  applyAccent(favColor);
 
   const mode=detectAurudo(name);
 
   S={
     name:name,
-    nickname:nickname||name.split(" ")[0],
+    nickname:name.split(" ")[0],
     turma:turma,
     email:email,
-    favColor:favColor,
     money:mode==="hardcore"?150:300,lazer:mode==="hardcore"?20:60,food:mode==="hardcore"?20:60,inv:mode==="hardcore"?20:40,day:1,
     debt:false,tiger:0,tigerCooldown:0,salaryDone:false,
     difficulty:mode==="hardcore"?3:mode==="dificil"?1.5:1,
