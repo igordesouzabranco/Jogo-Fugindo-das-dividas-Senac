@@ -180,6 +180,25 @@ function spawnConfetti(){
   setTimeout(()=>container.remove(),5000);
 }
 
+function saveWinData(){
+  const avg=Math.round((S.lazer+S.food+S.inv)/3);
+  const data={
+    nome:S.name,
+    turma:S.turma,
+    salarioRestante:S.money,
+    status:avg,
+    modo:S.mode||"normal",
+    data:new Date().toISOString()
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="vitoria_"+S.name.replace(/\s+/g,"_")+".json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function finish(reason){
   show("end");
   const win=reason==="win";
@@ -198,12 +217,15 @@ function finish(reason){
     '</div>'+
     "<p>"+(win?"Deu tudo certo. Equilibrou tudo durante 30 dias. Manda bem!":reason)+"</p>"+
     (!win&&S.mode==="hardcore"?'<p style="margin-top:12px;font-size:14px;color:#facc15;font-weight:700"><i class="fa-solid fa-fire"></i> Se voce perdeu no Hardcore, voce so tem SABOR aura <i class="fa-solid fa-fire"></i></p>':"")+
+    (win?'<p style="margin-top:12px;font-size:13px;color:var(--ink-sec)"><i class="fa-solid fa-download"></i> Seus dados foram baixados em JSON.</p>':'')+
     '<div class="linkedin-cta">'+
     '<span class="cta-icon"><i class="fa-solid fa-handshake"></i></span>'+
     '<p class="cta-title">E ai, curtiu?</p>'+
     '<p class="cta-text">Me segue no LinkedIn e conta o que achou! Sua opinião me ajuda demais.</p>'+
     '<a href="https://www.linkedin.com/in/igor-de-souza-branco-b68630314/" target="_blank" rel="noopener" class="cta-btn"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>'+
     '</div>';
+  $("restart").style.display=win?"none":"block";
+  if(win)saveWinData();
 }
 
 function check(){
