@@ -187,8 +187,7 @@ function saveWinData(){
     turma:S.turma,
     salarioRestante:S.money,
     status:avg,
-    modo:S.mode||"normal",
-    data:new Date().toISOString()
+    modo:S.mode||"normal"
   };
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob);
@@ -209,7 +208,7 @@ function finish(reason){
     '<span class="tag">'+(win?"MÊS CONCLUÍDO":"FIM DE JOGO")+'</span>'+
     '<h2>'+(win?"Passou direto, "+player+"!": "Game over")+"</h2>"+
     "<p>"+S.name+" ("+S.turma+") terminou com <b>"+money(S.money)+"</b>.</p>"+
-    (S.mode?'<p><span class="diff-badge '+S.mode+'">'+(S.mode==="hardcore"?'<i class="fa-solid fa-fire"></i> HARDCORE':'<i class="fa-solid fa-bolt"></i> DIFICIL")+'</span></p>':"")+
+    (S.mode?'<p><span class="diff-badge '+S.mode+'">'+(S.mode==="hardcore"?'<i class="fa-solid fa-fire"></i> HARDCORE':'<i class="fa-solid fa-bolt"></i> DIFICIL')+'</span></p>':"")+
     '<div class="stats-summary">'+
       '<div class="stat-item"><span class="stat-val"><i class="fa-solid fa-gamepad"></i> '+Math.round(S.lazer)+'</span><span class="stat-label">Lazer</span></div>'+
       '<div class="stat-item"><span class="stat-val"><i class="fa-solid fa-utensils"></i> '+Math.round(S.food)+'</span><span class="stat-label">Alimentacao</span></div>'+
