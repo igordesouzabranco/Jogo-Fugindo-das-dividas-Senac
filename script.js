@@ -3,7 +3,7 @@
 const $=id=>document.getElementById(id);
 const clamp=(n)=>Math.max(0,Math.min(100,n));
 const money=n=>"R$ "+Math.max(0,Math.round(n)).toLocaleString("pt-BR");
-const tigrinho='<img src="tigrinho.jpg" alt="Tigrinho" class="tigrinho-img">';
+const tigrinho='<img src="/img/tigrinho.jpg" alt="Tigrinho" class="tigrinho-img">';
 
 let S={};
 let currentCard=null;
@@ -100,7 +100,6 @@ const randomEvents=[
   {name:"Voluntariado",emoji:'<i class="fa-solid fa-people-group"></i>',msg:"Ajudou num projeto comunitário.",e:{lazer:6,inv:4},type:"good",minDay:5},
   {name:"Promo Relâmpago",emoji:'<i class="fa-solid fa-bolt-lightning"></i>',msg:"Economizou R$ 25 nas compras.",e:{money:25,food:5},type:"good",minDay:3},
   {name:"Consulta Médica",emoji:'<i class="fa-solid fa-stethoscope"></i>',msg:"Consulta médica: R$ 60.",e:{money:-60,lazer:-3},type:"bad",minDay:4},
-  {name:"Ganhou no Jogo",emoji:'<i class="fa-solid fa-dice"></i>',msg:"Ganhou R$ 30 no jogo. Sorte!",e:{money:30,lazer:5},type:"good",minDay:5},
   {name:"Cartão Clonado",emoji:'<i class="fa-solid fa-credit-card"></i>',msg:"Cartão clonado. Compra de R$ 45.",e:{money:-45,lazer:-8,inv:-5},type:"bad",minDay:6},
   {name:"Encontro de Graça",emoji:'<i class="fa-solid fa-heart"></i>',msg:"Encontro no parque. Zero custo.",e:{lazer:15,food:-2},type:"good",minDay:3},
   {name:"Esqueceu a Marmita",emoji:'<i class="fa-solid fa-box"></i>',msg:"Esqueceu a marmita. Comida cara.",e:{money:-20,food:-5},type:"bad",minDay:2},
@@ -116,7 +115,6 @@ const randomEvents=[
   {name:"Festa de Graça",emoji:'<i class="fa-solid fa-champagne-glasses"></i>',msg:"Festa grátis no bairro.",e:{lazer:14,food:5},type:"good",minDay:3},
   {name:"Perdeu o Ônibus",emoji:'<i class="fa-solid fa-bus-simple"></i>',msg:"Ônibus saiu. Teve que ir a pé.",e:{lazer:-6,food:-2},type:"bad",minDay:2},
   {name:"Quebrou o Fone",emoji:'<i class="fa-solid fa-headphones"></i>',msg:"Fone quebrou. Novo: R$ 30.",e:{money:-30,lazer:-5},type:"bad",minDay:3},
-  {name:"Bônus do Trampo",emoji:'<i class="fa-solid fa-sack-dollar"></i>',msg:"Chefe deu R$ 35 de bônus!",e:{money:35,lazer:5,inv:3},type:"good",minDay:5},
   {name:"Roubo de Bike",emoji:'<i class="fa-solid fa-bicycle"></i>',msg:"Roubaram tua bike. Prejuízo: R$ 100.",e:{money:-100,lazer:-15},type:"bad",minDay:7},
   {name:"Doação de Sangue",emoji:'<i class="fa-solid fa-droplet"></i>',msg:"Doadu sangue. Ganhou R$ 15 + lanche.",e:{money:15,food:8,lazer:3},type:"good",minDay:4},
   {name:"Acidente Leve",emoji:'<i class="fa-solid fa-band-aid"></i>',msg:"Machucou. Curativo: R$ 25.",e:{money:-25,lazer:-6,food:-3},type:"bad",minDay:3},
@@ -132,26 +130,18 @@ const randomEvents=[
   {name:"Encomenda Extraviada",emoji:'<i class="fa-solid fa-box"></i>',msg:"Correio perdeu. R$ 35 perdidos.",e:{money:-35,lazer:-5},type:"bad",minDay:4},
   {name:"Economia no Mercado",emoji:'<i class="fa-solid fa-store"></i>',msg:"Economizou R$ 20 nas compras.",e:{money:20,food:3},type:"good",minDay:3},
   {name:"Multa de Barulho",emoji:'<i class="fa-solid fa-volume-high"></i>',msg:"Vizinha reclamou. Multa R$ 30.",e:{money:-30,lazer:-5},type:"bad",minDay:4},
-  {name:"Aula Particular",emoji:'<i class="fa-solid fa-chalkboard-user"></i>',msg:"Deu aula e ganhou R$ 45.",e:{money:45,inv:5,lazer:-3},type:"good",minDay:5},
-  {name:"Furto no Senac",emoji:'<i class="fa-solid fa-person-falling-burst"></i>',msg:"Roubaram lanche. -R$ 20.",e:{money:-20,food:-5},type:"bad",minDay:3},
   {name:"Pontos do Cartão",emoji:'<i class="fa-solid fa-credit-card"></i>',msg:"Pontos viraram R$ 20.",e:{money:20,lazer:3},type:"good",minDay:4},
-  {name:"Reparo em Casa",emoji:'<i class="fa-solid fa-wrench"></i>',msg:"Torneira pingava. Reparo: R$ 35.",e:{money:-35,lazer:-3},type:"bad",minDay:4},
-  {name:"Aula de Graça",emoji:'<i class="fa-solid fa-chalkboard"></i>',msg:"Aula extra grátis. Investimento!",e:{inv:8,lazer:2},type:"good",minDay:3},
-  {name:"Gorjeta Boa",emoji:'<i class="fa-solid fa-hand-holding-dollar"></i>',msg:"Ganhou R$ 15 de gorjeta.",e:{money:15,lazer:5},type:"good",minDay:3},
-  {name:"Raspadinha",emoji:'<i class="fa-solid fa-ticket"></i>',msg:"Raspadinha deu R$ 10!",e:{money:10,lazer:3},type:"good",minDay:2},
-  {name:"Conta Dupla",emoji:'<i class="fa-solid fa-receipt"></i>',msg:"Restaurante cobrou duas vezes. -R$ 40.",e:{money:-40,lazer:-5},type:"bad",minDay:4},
-  {name:"Ajuda no Senac",emoji:'<i class="fa-solid fa-graduation-cap"></i>',msg:"Professor deu nota extra.",e:{inv:6,lazer:3},type:"good",minDay:3},
+  {name:"Reparo em Casa",emoji:'<i class="fa-solid fa-wrench"></i>',msg:"Torneira pingava. Reparo: R$ 35.",e:{money:-35,lazer:-3},type:"bad",minDay:4},,
+  {name:"10% do garçom",emoji:'<i class="fa-solid fa-receipt"></i>',msg:"Me pergunto se esse dinheiro chega realmente até eles. -R$ 40.",e:{money:-40,lazer:-5},type:"bad",minDay:4},
   {name:"Gasto com Roupa",emoji:'<i class="fa-solid fa-shirt"></i>',msg:"Comprou roupa pro evento. -R$ 40.",e:{money:-40,lazer:-2},type:"bad",minDay:4},
   {name:"Venda de Eletrônico",emoji:'<i class="fa-solid fa-laptop"></i>',msg:"Vendeu celular velho. R$ 70!",e:{money:70,inv:5},type:"good",minDay:6},
   {name:"Multa de Velocidade",emoji:'<i class="fa-solid fa-gauge-high"></i>',msg:"Radar te multou. R$ 50.",e:{money:-50,lazer:-6},type:"bad",minDay:5},
-  {name:"Soneca no Intervalo",emoji:'<i class="fa-solid fa-bed"></i>',msg:"Soneca no intervalo. Recarregou!",e:{lazer:8,food:-2},type:"good",minDay:2},
   {name:"Compra por Impulso",emoji:'<i class="fa-solid fa-cart-shopping"></i>',msg:"Comprou desnecessário. -R$ 30.",e:{money:-30,lazer:3},type:"bad",minDay:3},
   {name:"Trabalho Voluntário",emoji:'<i class="fa-solid fa-handshake"></i>',msg:"Campanha solidária. Experiência.",e:{inv:6,lazer:4},type:"good",minDay:4},
   {name:"Enchente",emoji:'<i class="fa-solid fa-house-flood-water"></i>',msg:"Alagou. Perdeu comida. -R$ 40.",e:{money:-40,food:-10,lazer:-8},type:"bad",minDay:6},
   {name:"Bônus Pontualidade",emoji:'<i class="fa-solid fa-clock"></i>',msg:"R$ 10 por ser pontual.",e:{money:10,inv:2},type:"good",minDay:3},
   {name:"Jogo de Aposta",emoji:'<i class="fa-solid fa-dice"></i>',msg:"Perdeu R$ 20 apostando.",e:{money:-20,lazer:-5},type:"bad",minDay:4},
   {name:"Passeio no Parque",emoji:'<i class="fa-solid fa-tree"></i>',msg:"Parque público. Zero custo.",e:{lazer:10,food:-1},type:"good",minDay:2},
-  {name:"Prejuízo Online",emoji:'<i class="fa-solid fa-gamepad"></i>',msg:"Perdeu R$ 25 apostando online.",e:{money:-25,lazer:-8},type:"bad",minDay:4},
   {name:"Oferta Relâmpago",emoji:'<i class="fa-solid fa-bolt-lightning"></i>',msg:"Economizou R$ 15 na oferta.",e:{money:15,food:3},type:"good",minDay:3},
   {name:"Amigo Não Pagou",emoji:'<i class="fa-solid fa-user-minus"></i>',msg:"Amigo devolveu só metade. -R$ 15.",e:{money:-15,lazer:-5},type:"bad",minDay:4},
   {name:"Mini Empreendimento",emoji:'<i class="fa-solid fa-store"></i>',msg:"Vendeu bolo de pote. R$ 35!",e:{money:35,inv:5,lazer:-2},type:"good",minDay:5},
@@ -174,9 +164,7 @@ const randomEvents=[
   {name:"Perda no Uber",emoji:'<i class="fa-solid fa-car"></i>',msg:"Esqueceu coisa no Uber. -R$ 15.",e:{money:-15,lazer:-4},type:"bad",minDay:3},
   {name:"Natação Grátis",emoji:'<i class="fa-solid fa-person-swimming"></i>',msg:"Natação na praça esportiva.",e:{lazer:10,food:-2},type:"good",minDay:4},
   {name:"Cobrança Indevida",emoji:'<i class="fa-solid fa-ban"></i>',msg:"Banco cobrou taxa fantasma. -R$ 15.",e:{money:-15,lazer:-3},type:"bad",minDay:4},
-  {name:"Mentoria Grátis",emoji:'<i class="fa-solid fa-chalkboard-user"></i>',msg:"Mentoria grátis. Conhecimento!",e:{inv:8,lazer:3},type:"good",minDay:5},
   {name:"Compra Desnecessária",emoji:'<i class="fa-solid fa-cart-plus"></i>',msg:"Comprou o que não precisava. -R$ 35.",e:{money:-35,lazer:2},type:"bad",minDay:3},
-  {name:"Voluntariado Senac",emoji:'<i class="fa-solid fa-people-carry-box"></i>',msg:"Ajudou no evento do Senac.",e:{inv:5,lazer:4},type:"good",minDay:4},
   {name:"Fio Desencapado",emoji:'<i class="fa-solid fa-plug"></i>',msg:"Eletricista: R$ 40.",e:{money:-40,lazer:-5},type:"bad",minDay:5},
   {name:"Vale-Presente",emoji:'<i class="fa-solid fa-gift"></i>',msg:"Ganhou vale-presente de R$ 30.",e:{money:30,lazer:5},type:"good",minDay:3},
   {name:"Carro Empenado",emoji:'<i class="fa-solid fa-car-burst"></i>',msg:"Mecânico: R$ 80.",e:{money:-80,lazer:-10},type:"bad",minDay:6},
@@ -203,28 +191,27 @@ const cards=[
   secret:SC(.25,S_("A marmita ficou tão boa que o colega pagou pra comer. Sério.",{food:2},10),null)},
 {t:"Cozinhar pra semana",d:"Domingo na cozinha. Trabalho chato mas economiza horrores.",c:30,e:{food:18,inv:6,lazer:-7},
   secret:SC(.20,S_("Postou a receita e viralizou. Vendeu o segredo por R$ 15.",{inv:5},15),null)},
-{t:"Fast-food com cupom",d:"App com desconto. Rápido e gostoso, mas tu sabe como é.",c:15,e:{food:7,lazer:7,inv:-3},
+{t:"Fast-food com cupom",d:"App com desconto. Rápido e gostoso, mas tu sabe como é.",c:35,e:{food:7,lazer:7,inv:-3},
   secret:SC(.35,null,S_("Passou mal de madrugada. Perdeu o dia todo.",{food:-8,lazer:-6}))},
 {t:"Lanche da tarde",d:"A fome bateu forte. Gasta agora ou segura até a noite?",c:8,e:{food:9,lazer:2,inv:-2},
   secret:SC(.20,null,S_("O lanche tava estragado. Noite no hospital.",{food:-6,lazer:-5,inv:-3}))},
-{t:"Churrasco com a galera",d:"Cada um leva uma coisa. Convívio bom, comida melhor.",c:15,e:{lazer:12,food:8,inv:-3},
-  secret:SC(.25,S_("Tu trouxe o melhor prato e todo mundo babou. Moral lá em cima.",{lazer:5,food:3}),null)},
-{t:"Delivery preguiçoso",d:"Tava exausto, não dava pra cozinhar. Pedi pelo app.",c:25,e:{food:9,lazer:6,inv:-5},
+{t:"Churrasco com a galera",d:"Cada um leva uma coisa. Convívio bom, comida melhor.",c:45,e:{lazer:12,food:8,inv:-3},
+  secret:SC(.25,S_("Tu trouxe o melhor prato e todo mundo babou. Farmou aura.",{lazer:5,food:3}),null)},
+{t:"Delivery preguiçoso",d:"Tava exausto, não dava pra cozinhar. Pedi pelo app.",c:60,e:{food:9,lazer:6,inv:-5},
   secret:SC(.30,null,S_("Atrasou 2 horas. Comida fria, noite perdida.",{lazer:-5,food:-4}))},
 {t:"Padaria da esquina",d:"Pão com manteiga e café. Simples mas resolve.",c:6,e:{food:11,lazer:3,inv:-2},
-  secret:SC(.15,S_("A dona te conheceu. Agora tu ganha desconto todo dia.",{food:3,inv:2}),null)},
+  secret:SC(.15,S_("A dona te reconheceu. Agora tu ganha desconto todo dia.",{food:3,inv:2}),null)},
 {t:"Piquenique no parque",d:"Sanduíche na mão e papo bom. Não precisa de mais nada.",c:5,e:{lazer:14,food:6,inv:1},
-  secret:SC(.20,S_("Achou um evento grátis no parque. Dia completo.",{lazer:5,inv:3}),null)},
+  secret:SC(.20,S_("Achou uma nota de 20 no chão. Já foi direto pro CDB.",{lazer:5,inv:10}),null)},
 
 /* === LAZER === */
 {t:"Cinema com a turma",d:"Filme novo e pipoca. Caro mas tem vez que vale a pena.",c:25,e:{lazer:19,food:-4,inv:-5},
-  secret:SC(.25,S_("O filme era sobre finanças. Até que aprendi algo.",{inv:6,lazer:3}),S_("O som estourou no meio do filme. Péssimo.",{lazer:-4}))},
+  secret:SC(.25,S_("Foram ver Jogos Vorazes: Amanhecer na Colheita. Boa escolha.",{inv:6,lazer:3}),S_("O filme era horrivel. Nota 2 no Letterboxd.",{inv:-5,lazer:-10}))},
 {t:"Show ao vivo",d:"Banda que tu gosta. Entrada salgada mas a experiência é única.",c:40,e:{lazer:15,food:-3,inv:-5},
   secret:SC(.20,S_("Foi backstage e conheceu a banda. Dia de nunca esquecer.",{lazer:10}),S_("Choveu e tu pegou gripe na hora.",{food:-5,lazer:-8}))},
-{t:"Lanchonete com os parça",d:"Rolê na lanchonete do bairro. Papo bom e combos baratos.",c:15,e:{lazer:16,food:3,inv:-5},
-  secret:SC(.30,S_("Um amigo te ligou pra um freela bom. Contato é tudo.",{inv:8,lazer:3}),S_("Gastou demais e o papo não fluiu.",{lazer:-3,inv:-4}))},
+{t:"Lanchonete com os parça",d:"Rolê na lanchonete do bairro. Papo bom e combos baratos.",c:15,e:{lazer:16,food:3,inv:-5}},
 {t:"Passeio de bike",d:"Rolê sem gastar nada. Ar livre e sensação de liberdade.",c:0,e:{lazer:12,food:-1,inv:4},
-  secret:SC(.20,S_("Tu gravou o passeio e postou. Viralizou.",{lazer:5,inv:3}),S_("Estourou o pneu. Prejuízo.",{inv:-3,lazer:-2}))},
+  secret:SC(.20,S_("Tu gravou o passeio e postou. Viralizou.",{lazer:5,inv:3}),S_("Os Fans amaram tanto, mas essa vida não é pra você. Vamo Rosa!",{lazer:-10}))},
 {t:"Banho de praia",d:"Dia de sol. Barato, longe e bom pra descomprimir.",c:5,e:{lazer:18,food:-3,inv:-2},
   secret:SC(.25,S_("Achou umas conchas raras e vendeu online.",{lazer:3,inv:2},20),S_("Queimou feio. Remédio caro.",{food:-4,lazer:-5,inv:-2}))},
 
@@ -235,50 +222,42 @@ const cards=[
   secret:SC(.40,S_("Deu sorte! Rendeu o dobro.",{inv:10},50),S_("Perdeu tudo. Golpe clássico.",{inv:-15,lazer:-8,food:-5}))},
 {t:"Comprar ações",d:"Ação promissora. Pode subir ou despencar.",c:25,e:{inv:18,lazer:-6,food:-4},
   secret:SC(.35,S_("Subiu 40%. Tu lucrou bem.",{inv:8},40),S_("Despencou. Prejuízo pesado.",{inv:-12,lazer:-5,food:-3}))},
-{t:"Inscrição pra concurso",d:"Concurso bom. Investe agora, o retorno vem depois.",c:35,e:{inv:14,lazer:-8,food:-3},
-  secret:SC(.15,S_("Tu passou! Renda garantida no futuro.",{inv:10,lazer:10,food:8},80),S_("Não foi dessa vez. Mas a experiência ajudou.",{inv:3,lazer:-3}))},
+{t:"Inscrição pro ENEM",d:"Investe agora, o retorno vem depois.",c:35,e:{inv:14,lazer:-8,food:-3},
+  secret:SC(.15,S_("Tu passou! Vaga garantida no UniSenac.",{inv:10,lazer:10,food:8}),S_("Não foi dessa vez. Não adianta ver resumão um dia antes da prova.",{inv:-10,lazer:-5}))},
 {t:"Aprender a investir",d:"Conta na corretora e estudo básico. Primeiro passo.",c:5,e:{inv:15,lazer:-6,food:-2},
-  secret:SC(.30,S_("Primeiro investimento rendeu 15%. Vício bom.",{inv:5},15),null)},
+  secret:SC(.30,S_("Primeiro investimento rendeu 15%. Vício bom.",{inv:5},15),null,S_("Tentou fazer day-trade. Você é CLT meu filho.",{inv:-10,lazer:-5}))},
 
 /* === TRABALHO / RENDA === */
-{t:"Hora extra no trampo",d:"Descansa menos, ganha mais. Troca tempo por grana.",c:0,e:{inv:6,lazer:-10,food:-5},gain:20,
-  secret:SC(.30,S_("O chefe notou e te deu bônus.",{inv:3},25),S_("Exaustão total. Errou tudo no trabalho.",{lazer:-5,inv:-6}))},
-{t:"Freela rápido",d:"Serviço pontual. Rende bem mas tira teu tempo livre.",c:0,e:{lazer:-6,inv:4,food:-2},gain:30,
+{t:"Bico rápido",d:"Serviço pontual. Rende bem mas tira teu tempo livre.",c:0,e:{lazer:-10,inv:8,food:-2},gain:30,
   secret:SC(.20,S_("Cliente curtiu. Já te chamou pra próxima.",{inv:5},50),null)},
-{t:"Bolo de pote",d:"Tu é a galera fizeram bolo de pote pra vender no Senac. Rendeu bem.",c:0,e:{inv:3,lazer:2,food:1},gain:18,
-  secret:SC(.25,S_("Vendeu tudo em 1 hora. Virou empreendedor.",{inv:3,lazer:2}),S_("Não vendeu nada. Sobrou bolo na sua casa.",{inv:-3,lazer:-2}))},
+{t:"Morango cravejado",d:"Tu e a galera fizeram morango cravejado pra vender na escola. Rendeu bem.",c:0,e:{inv:3,lazer:2,food:1},gain:18,
+  secret:SC(.25,S_("Vendeu tudo em 1 hora. Morangudo.",{inv:3,lazer:2}),S_("Fez errado a receita. Quebrou os dentes de uma colega.",{inv:-10,lazer:-5}))},
 {t:"Mesada extra da vó",d:"Vó teve pena e soltou um dinheirinho extra. Amor de avó não tem preço.",c:0,e:{inv:5,lazer:5,food:5},gain:35,
-  secret:SC(.25,S_("Vó disse que tu é o neto favorito. Ganhou mais um pouco.",{inv:5,lazer:5},20),S_("Vó cobrou de volta no dia seguinte. Amor tem preço sim.",{inv:-5,lazer:-5}))},
+  secret:SC(.25,S_("Vó disse que tu é o neto favorito. Ganhou mais um pouco.",{inv:5,lazer:5},20))},
 
 /* === GASTOS FIXOS === */
 {t:"Conta de luz",d:"Conta veio salgada. Banho longo custa caro.",c:35,e:{food:-4,lazer:-3,inv:-4},forced:true,
   secret:SC(.20,S_("Aprendeu a economizar. Conta do mês que vem cai 40%.",{inv:5,food:3}),null)},
-{t:"Recarga do celular",d:"Plano acabou. Sem internet não dá mas custa.",c:20,e:{food:-2,lazer:3,inv:5},forced:true,
-  secret:SC(.25,S_("Bônus de fidelidade. Crédito extra.",{inv:3},15),S_("Caiu um golpe no pix quando tu tava sem net.",{inv:-4,lazer:-3}))},
+{t:"Recarga do celular",d:"Plano acabou. Não tem como se comunicar sem internet.",c:20,e:{food:-2,lazer:3,inv:5},forced:true,
+  secret:SC(.25,S_("Bônus de fidelidade. Crédito extra.",{inv:3},15),S_("Ficou vendo brainrot e gastou todos os dados.",{inv:-10,lazer:-5}))},
 
 /* === ESCOLHAS === */
-{t:"Aposta do dia",d:"Promessa de ganhar fácil. Pode lucrar ou queimar tudo.",c:15,e:{inv:15,lazer:-10,food:-5},gain:40,
-  secret:SC(.45,S_("Deu certo. Tu saiu antes de perder.",{inv:5,lazer:5}),S_("Perdeu tudo e quis jogar mais. Vício é foda.",{inv:-15,lazer:-12,food:-8}))},
-{t:"Empréstimo rápido",d:"App oferece crédito fácil. Dinheiro hoje, dívida amanhã.",c:0,e:{inv:-8,lazer:8,food:4},gain:60,
-  secret:SC(.30,S_("Pagou tudo no mês. Sem juros, sem estresse.",{inv:8,lazer:3}),S_("Não pagou. Juros compostos devoraram teu salário.",{inv:-12,lazer:-8,food:-6}))},
-{t:"Parcelar na feira",d:"O vendedor deixou parcelar. Pega agora, paga depois. Cilada ou estratégia?",c:20,e:{lazer:12,inv:-6,food:-2},
-  secret:SC(.30,S_("Pagou tudo no prazo. Boa.",{inv:5}),S_("Perdeu o controle. Fatura explodiu.",{inv:-10,lazer:-5,food:-4}))},
-{t:"Presente pra mãe",d:"Mãe merece. Amor não tem preço mas tem custo.",c:25,e:{lazer:8,food:-3,inv:-5},
+{t:"Ir de bicicleta pro trabalho",d:"Você não usa ela desde o oitavo ano. O que pode dar de errado?",c:0,e:{lazer:-10},
+  secret:SC(.45,S_("Chegou mais cedo e não poluiu o planeta! #gratiluz.",{inv:5,lazer:5}),S_("Quebrou o guidão, furou as rodas, descarrilhou a correia e ainda chegou atrasado.",{inv:-15,lazer:-12,food:-10}))},
+{t:"Presente pra mãe",d:"Mãe merece. Amor não tem preço mas tem custo.",c:75,e:{lazer:8,food:-3,inv:-5},
   secret:SC(.20,S_("Mãe chorou de emoção. Não tem dinheiro que pague isso.",{lazer:10,food:5}),null)},
-{t:"Conta no azul",d:"Saldo positivo. Motivação pra continuar.",c:0,e:{lazer:4,food:2,inv:3},forced:true,
-  secret:SC(.10,S_("Banco te liberou limite maior. Oportunidade.",{inv:5},0),null)},
-{t:"Meta do mês",d:"Economia batida. Disciplina dá resultado.",c:0,e:{lazer:5,food:3,inv:5},forced:true,
-  secret:SC(.10,S_("Teu mentor ficou impressionado. Indicação de emprego.",{inv:10},60),null)},
-{t:"Orçamento mensal",d:"Anotou tudo. Saber onde vai o dinheiro é poder.",c:0,e:{inv:6,lazer:-2,food:2},forced:true,
-  secret:SC(.15,S_("Descobriu um gasto escondido e cortou. Economia real.",{inv:5},20),null)},
+{t:"Conta de água com desconto",d:"Quem diria que tomar um banho rápido não tem beneficios.",c:45,e:{lazer:-5,inv:7},forced:true,
+  secret:SC(.10,S_("Os banhos foram tão rápidos que não funcionaram. O Rexona te abandonou dessa vez.",{lazer:-10}),null)},
+{t:"Orçamento mensal",d:"Anotou tudo. Já sabe quanto que vai gastar.",c:0,e:{inv:6,lazer:-2,food:2},forced:true,
+  secret:SC(.15,S_("Descobriu uma assinatura escondida e cancelou.",{inv:5},20),null)},
 {t:"Sair sem gastar",d:"Praça, papo e risada. Amizade não precisa de dinheiro.",c:0,e:{lazer:10,food:-1,inv:2},forced:true,
-  secret:SC(.15,S_("O rolê rendeu uma ideia de negócio. Inspiração.",{inv:8}),null)},
-{t:"Abono Salarial",d:"Governo liberou. Dinheiro extra sem fazer nada.",c:0,e:{inv:3,lazer:3,food:3},gain:30,
-  secret:SC(.15,S_("Abono caiu na conta. Dinheiro grátis!",{inv:3},30),S_("Gastou tudo em compra online. Arrependimento.",{lazer:-5,inv:-8}))},
-{t:"Fim de semana produtivo",d:"Estudou, cozinhou e organizou as contas. Dedicação.",c:0,e:{inv:8,lazer:-3,food:4},forced:true,
-  secret:SC(.15,S_("Teu planejamento rendeu bônus surpresa no trampo.",{inv:3,food:2},25),null)},
-{t:"Namoradinha",d:"Saíste com alguém especial. Amor custa mas a alma agradece.",c:30,e:{lazer:20,food:2,inv:-9},
-  secret:SC(.20,S_("A pessoa te presenteou de volta. Relação recíproca.",{lazer:5,inv:3},20),S_("Não deu certo. Dinheiro e emoção no lixo.",{lazer:-8,food:-3}))}
+  secret:SC(.15,S_("O rolê rendeu uma ideia de investimento. Seus investimentos vão crescer.",{inv:8}),null)},
+{t:"",d:"Dinheiro extra pelo seu esforço.",c:0,e:{inv:8,lazer:5,food:0},gain:30,
+  secret:SC(.15,S_("Usou o dinheiro sabiamente!",{inv:5},30),S_("Imprevisto em casa. Nem deu pra curtir o bônus direito. AFF",{lazer:-8,inv:-10}))},
+{t:"Fim de semana produtivo",d:"Estudou, cozinhou e organizou o quarto. Dedicação.",c:0,e:{inv:0,lazer:5,food:0},forced:true,
+  secret:SC(.15,S_("Investiu no Tesouro Direto.",{inv:15}),S_("O seu investimento era no Banco Master, perdeu tudo KKKKK", {inv:-20}))},
+{t:"Namoradinha",d:"Saíste com alguém especial. Amor custa mas a alma agradece.",c:60,e:{lazer:20,food:2,inv:-9},
+  secret:SC(.20,S_("A pessoa te presenteou de volta. Relação recíproca.",{lazer:5,inv:3},20),S_("Levou um ghosting brabo. Dinheiro e emoção no lixo.",{lazer:-15,food:-8}))}
 ];
 
 function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active")}
@@ -360,11 +339,10 @@ function finish(reason){
     '</div>'+
     "<p>"+(win?"Deu tudo certo. Equilibrou tudo durante 30 dias. Manda bem!":reason)+"</p>"+
     (!win&&S.mode==="hardcore"?'<p style="margin-top:12px;font-size:14px;color:#facc15;font-weight:700"><i class="fa-solid fa-fire"></i> Se você perdeu no Hardcore, você só tem SABOR aura <i class="fa-solid fa-fire"></i></p>':"")+
-    (win?'<p style="margin-top:12px;font-size:13px;color:var(--ink-sec)"><i class="fa-solid fa-download"></i> Seus dados foram baixados em JSON.</p>':'')+
     '<div class="linkedin-cta">'+
     '<span class="cta-icon"><i class="fa-solid fa-handshake"></i></span>'+
     '<p class="cta-title">E aí, curtiu?</p>'+
-    '<p class="cta-text">Me segue no LinkedIn e conta o que achou! Sua opinião me ajuda demais.</p>'+
+    '<p class="cta-text">Me segue no LinkedIn e conta o que achou! Isso ajuda tanto a mim quanto a você.</p>'+
     '<a href="https://www.linkedin.com/in/igor-de-souza-branco-b68630314/" target="_blank" rel="noopener" class="cta-btn"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>'+
     '</div>';
   $("restart").style.display=win?"none":"block";
@@ -442,7 +420,7 @@ function nextDay(){
   }
 
   if(S.tiger===0&&S.tigerCooldown===0&&!activeSpecial&&S.day>=4){
-    const tigerChance=0.10;
+    const tigerChance=0.05;
     const specialChance=0.08;
     const roll=Math.random();
     if(roll<tigerChance){
@@ -481,9 +459,9 @@ function showTiger(){
     '<div class="swipe-overlay deny"><i class="fa-solid fa-xmark"></i> NEGAR</div>'+
     '<div class="card-content">'+
     '<span class="tag">EVENTO ESPECIAL</span>'+
-    '<h3><img src="tigrinho.jpg" alt="Tigrinho" class="tigrinho-img big"> A carta do Tigrinho</h3>'+
-    '<p>Caiu uma notificação no celular. "Ganhe dinheiro fácil!" Será?</p>'+
-    '<div class="panel danger"><b><i class="fa-solid fa-triangle-exclamation"></i> Vasculha o bolso</b><p>Se aceitar, as próximas <b>3 cartas são obrigatórias</b> — sem recusa. Dá pra se recuperar depois, mas vai ser puxado.</p></div>'+
+    '<h3><img src="/img/tigrinho.jpg" alt="Tigrinho" class="tigrinho-img big"> A carta do Tigrinho</h3>'+
+    '<p>Caiu uma notificação no celular. "Ganhe dinheiro fácil!"</p>'+
+    '<div class="panel danger"><b><i class="fa-solid fa-triangle-exclamation"></i>Ludopatia</b><p>Se aceitar, as próximas <b>3 cartas são obrigatórias</b> — sem recusa. Dá pra se recuperar depois, mas vão haver cosequências permanentes.</p></div>'+
     '</div>'+
     '<div class="swipe-hint"><span class="hint-left"><i class="fa-solid fa-arrow-left"></i> Negar</span><span class="hint-right">Aceitar <i class="fa-solid fa-arrow-right"></i></span></div>';
 
@@ -691,12 +669,12 @@ function makeCard(){
     },800);
     return;
   }else if(S.day===7){
-    c={t:"Conta de luz",d:"A conta chegou. Não pagar cria uma dívida.",c:50,e:{food:-3,lazer:-4,inv:-4},fixed:true};
+    c={t:"Conta de luz",d:"A conta de luz chegou. Ninguem quer ficar no escuro.",c:50,e:{food:-5,lazer:5,inv:-10},fixed:true};
   }else if(S.day===15){
     c={t:"Ajuda em casa",d:"Contribuição mensal pra ajudar em casa. Não pagar cria conversa.",c:120,e:{food:-5,lazer:-7,inv:-7},fixed:true};
-  }else if(S.day===22){
-    c={t:"Recarga de transporte",d:"Bilhete unitário pro fim de semana. Sem isso não vai pra lugar nenhum.",c:25,e:{food:-2,lazer:-3,inv:-3},fixed:true};
-  }else{
+  }else if(S.day===25){
+    c={t:"Recarga do Spotify",d:"Não dá pegar o busão sem música.",c:22,e:{food:-5,lazer:5,inv:-9},forced:true};
+   }else{
     let available=cards.filter((_,i)=>!usedCards.includes(i));
     if(available.length===0){usedCards=[];
   S.usedSpecials=[];
@@ -807,8 +785,8 @@ function renderCard(c){
       const cardEl=$("card");
       if(cardEl){cardEl.classList.add("deny-warn");setTimeout(()=>cardEl.classList.remove("deny-warn"),300)}
       const msgs=[
-        "Tu tá isolado demais. Nada de social, nada de lazer. A saúde mental cobra.",
         "Recusou tudo. A preguiça e o isolamento tão consumindo teus status.",
+        "Ninguem é aguenta tanto tempo isolado.",
         "Sem friends, sem rolê, sem nada. Teus status tavam implorando por ação."
       ];
       showSecretToast(msgs[Math.min(consecutiveDenies-3,msgs.length-1)],false);
@@ -856,9 +834,9 @@ function showAurudoOverlay(name,mode,callback){
   ol.innerHTML=
     '<div class="aurudo-card'+(isHardcore?" hardcore":"")+'">'+
     '<span class="aurudo-emoji">'+(isHardcore?'<i class="fa-solid fa-skull"></i>':'<i class="fa-solid fa-fire"></i>')+'</span>'+
-    '<h2>'+(isHardcore?"VOCÊ É O MAIS AURUDO DO SENAC!":name+", tu é AURUDO!")+'</h2>'+
+    '<h2>'+(isHardcore?"VOCÊ É O MAIS AURUDO DO SENAC GRAVATAÍ!":name+", tu é AURUDO!")+'</h2>'+
     '<p>'+(isHardcore
-      ?"O nome tem 6767. Isso é lendário. Modo <b>Hardcore</b> desbloqueado."
+      ?"Esse nome tem 6767. Isso é aura + ego ^ 1000. Modo <b>Hardcore</b> desbloqueado."
       :"O nome tem 67. Isso é rareza. Modo <b>Difícil</b> ativado.")+'</p>'+
     '<div class="aurudo-mode">'+(isHardcore?'<i class="fa-solid fa-fire"></i> MODO HARDCORE <i class="fa-solid fa-fire"></i>':'<i class="fa-solid fa-bolt"></i> MODO DIFÍCIL <i class="fa-solid fa-bolt"></i>')+'</div>'+
     '<p style="margin-top:14px;font-size:12px;color:var(--ink-sec)">'+(isHardcore
@@ -880,7 +858,7 @@ function showIntro(){
     '<div class="card-content">'+
     '<span class="tag">DIA 1 · INÍCIO</span>'+
     '<h3><i class="fa-solid fa-briefcase"></i> Primeiro dia como jovem aprendiz</h3>'+
-    '<p>Você acabou de começar no SENAC. Tem <b>'+money(S.money)+'</b> no bolso e precisa sobreviver 30 dias equilibrando lazer, alimentação e investimentos.</p>'+
+    '<p>O mês acabou de começar. Tem <b>'+money(S.money)+'</b> no bolso e precisa sobreviver 30 dias equilibrando lazer, alimentação e investimentos.</p>'+
     '<div class="panel"><b><i class="fa-solid fa-circle-info"></i> Regras</b>'+
     '<p>Deslize o card pra <b>direita</b> pra aceitar ou <b>esquerda</b> pra negar.<br>'+
     'Seus 3 status não podem cair a zero. Cuidado com cada decisão!</p></div>'+
@@ -922,6 +900,8 @@ $("registerBtn").onclick=()=>{
 
   if(!name){err.textContent="Preenche o nome aí.";return}
   if(!turma){err.textContent="Qual tua turma do SENAC?";return}
+  if(turma.includes("6767")||turma.includes("67")){err.textContent="Uma turma com tanta aura não existe.";return}
+  if(/[a-zA-Z]/.test(turma)){err.textContent="Uma turma só pode ter números.";return}
   if(!email||!email.includes("@")){err.textContent="E-mail inválido, confere aí.";return}
   if(nameHasNumbersExcept67(name)){err.textContent="Nome não pode ter número! Só letras.";return}
 
