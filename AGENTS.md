@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Visao Geral
-**Fugindo das Dividas** — Jogo educativo de simulacao de sobrevivencia financeira. O jovem aprendiz gerencia R$ 300 durante 30 dias, tomando decisoes que afetam lazer, alimentacao e investimentos.
+**Fugindo das Dividas** — Jogo educativo de simulacao de sobrevivencia financeira. O jovem aprendiz gerencia R$ 800 durante 30 dias, tomando decisoes que afetam lazer, alimentacao e investimentos.
 
 ## Tecnologia
 - HTML5 + CSS3 + JavaScript (Vanilla JS)

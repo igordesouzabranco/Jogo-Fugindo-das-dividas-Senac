@@ -417,7 +417,8 @@ function makeCard(){
 
   if(S.day===1&&!S.salaryDone){
     S.salaryDone=true;
-    apply({food:3,inv:3},0,150);
+    const daySalary=S.mode==="hardcore"?80:S.mode==="dificil"?120:200;
+    apply({food:3,inv:3},0,daySalary);
     render();
     setTimeout(()=>{
       render();
@@ -644,7 +645,7 @@ $("registerBtn").onclick=()=>{
     nickname:name.split(" ")[0],
     turma:turma,
     email:email,
-    money:mode==="hardcore"?150:300,lazer:mode==="hardcore"?20:60,food:mode==="hardcore"?20:60,inv:mode==="hardcore"?20:40,day:1,
+    money:mode==="hardcore"?200:mode==="dificil"?400:800,lazer:mode==="hardcore"?20:mode==="dificil"?40:60,food:mode==="hardcore"?20:mode==="dificil"?40:60,inv:mode==="hardcore"?20:mode==="dificil"?30:40,day:1,
     debt:false,tiger:0,tigerCooldown:0,salaryDone:false,
     difficulty:mode==="hardcore"?3:mode==="dificil"?1.5:1,
     mode:mode
