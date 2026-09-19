@@ -16,6 +16,7 @@ const swipeThreshold=100;
 let consecutiveDenies=0;
 let permanentGainMul=1;
 let permanentCostMul=1;
+let introDone=false;
 
 const specialEvents=[
   {id:"golpe_pix",name:"Golpe do Pix",emoji:'<i class="fa-solid fa-credit-card"></i>',mandatory:2,
@@ -602,6 +603,29 @@ function showAurudoOverlay(name,mode,callback){
   ol.querySelector("#aurudoContinue").onclick=()=>{ol.remove();callback()};
 }
 
+function showIntro(){
+  const el=$("card");
+  el.style.transform="";
+  el.classList.remove("swiping","swipe-right","swipe-left");
+  cardLocked=false;
+  el.innerHTML=
+    '<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> COMECAR</div>'+
+    '<div class="card-content">'+
+    '<span class="tag">DIA 1 · INICIO</span>'+
+    '<h3><i class="fa-solid fa-briefcase"></i> Primeiro dia no SENAC</h3>'+
+    '<p>Voce acabou de comecar como jovem aprendiz. Tem <b>'+money(S.money)+'</b> no bolso e precisa sobreviver 30 dias equilibrando lazer, alimentacao e investimentos.</p>'+
+    '<div class="panel"><b><i class="fa-solid fa-circle-info"></i> Regras</b>'+
+    '<p>Deslize o card pra <b>direita</b> pra aceitar ou <b>esquerda</b> pra negar.<br>'+
+    'Seus 3 status nao podem cair a zero. Cuidado com cada decisao!</p></div>'+
+    '</div>'+
+    '<div class="swipe-hint"><span class="hint-right">Deslize pra comecar <i class="fa-solid fa-arrow-right"></i></span></div>';
+
+  setSwipeCallbacks(function(){
+    introDone=true;
+    makeCard();
+  },null);
+}
+
 function startGame(){
   usedCards=[];
   consecutiveDenies=0;
@@ -612,10 +636,12 @@ function startGame(){
   onSwipeDeny=null;
   permanentGainMul=1;
   permanentCostMul=1;
+  introDone=false;
   $("gameAvatar").innerHTML='<i class="'+S.look+'"></i>';
   show("game");
   initSwipe();
-  makeCard();
+  render();
+  showIntro();
 }
 
 $("registerBtn").onclick=()=>{
