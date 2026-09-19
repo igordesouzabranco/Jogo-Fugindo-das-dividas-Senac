@@ -36,7 +36,7 @@ Objeto global com:
 S = {
   name: string,      // Nome do personagem
   nickname: string,  // Primeiro nome (usado internamente)
-  money: number,     // Dinheiro disponivel (comeca com 300)
+  money: number,     // Dinheiro disponivel (comeca com 800)
   lazer: number,     // Status de lazer (0-100, comeca 60)
   food: number,      // Status de alimentacao (0-100, comeca 60)
   inv: number,       // Status de investimentos (0-100, comeca 40)
