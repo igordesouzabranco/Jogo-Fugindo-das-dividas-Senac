@@ -4,6 +4,8 @@ Jogo educativo de simulacao de sobrevivencia financeira desenvolvido para o SENA
 
 ## O Jogo
 
+https://igordesouzabranco.github.io/Jogo-Fugindo-das-dividas-Senac/
+
 Voce e um jovem aprendiz com **R$ 800** no bolso e precisa sobreviver **30 dias** equilibrando:
 - **Lazer** (0-100)
 - **Alimentacao** (0-100)
