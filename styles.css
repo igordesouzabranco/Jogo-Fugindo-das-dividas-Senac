@@ -168,6 +168,10 @@ body.user-accent .field input:focus,body.user-accent .field select:focus{border-
 .diff-badge.dificil{background:var(--warning-bg);color:var(--warning);border:1px solid rgba(245,158,11,.3)}
 .diff-badge.hardcore{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(239,68,68,.3)}
 
+/* === RANDOM EVENT === */
+@keyframes eventPop{0%{transform:scale(.95)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+.tag.event{background:var(--warning-bg);border-color:rgba(245,158,11,.3);color:var(--warning);animation:eventPop .4s ease}
+
 /* === DENY WARNING === */
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
 .deny-warn{animation:shake .3s ease}

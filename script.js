@@ -17,40 +17,182 @@ let consecutiveDenies=0;
 let permanentGainMul=1;
 let permanentCostMul=1;
 let introDone=false;
+let pendingConsequences=[];
 
 const specialEvents=[
-  {id:"golpe_pix",name:"Golpe do Pix",emoji:'<i class="fa-solid fa-credit-card"></i>',mandatory:2,
-   msg:"Caiu um pix fantasma na sua conta. Agora tu tá devendo R$ 80 e as próximas 2 cartas são obrigatórias.",
-   desc:"Alguém transferiu um pix errado pra tua conta e agora quer o dinheiro de volta — com juros.",cost:80,penalty:{lazer:-20,food:-20,inv:-20},gainMul:0.7,costMul:1.4},
-  {id:"emprestimo_fantasma",name:"Empréstimo Fantasma",emoji:'<i class="fa-solid fa-mobile-screen"></i>',mandatory:2,
-   msg:"Um app pegou seus dados e fez um empréstimo no seu nome. Tu não pediu mas vai pagar.",
-   desc:"Notificação: \"Empréstimo aprovado! R$ 100 na conta.\" Mas o app já começou a cobrar.",cost:100,penalty:{lazer:-25,food:-25,inv:-25},gainMul:0.75,costMul:1.35},
-  {id:"promocao_fake",name:"Promoção Golpista",emoji:'<i class="fa-solid fa-tag"></i>',mandatory:1,
-   msg:"50% OFF em tudo! Clicou e o app descontou R$ 50 de uma assinatura que tu não assinou.",
-   desc:"Oferta relâmpago que parecia boa demais. Era. Cobra assinatura fantasma.",cost:50,penalty:{lazer:-15,food:-15,inv:-15},gainMul:0.8,costMul:1.25},
-  {id:"divida_familiar",name:"Pediu pra Mãe",emoji:'<i class="fa-solid fa-user"></i>',mandatory:1,
-   msg:"Sua mãe emprestou R$ 40 mas disse que vai cobrar todo dia até voltar. E ainda te xingou.",
-   desc:"Dívida familiar. Não tem app que resolva. Paga ou perde o almoço de domingo.",cost:40,penalty:{lazer:-15,food:-15,inv:-15},gainMul:0.85,costMul:1.2},
-  {id:"clonagem_cartao",name:"Clonaram teu Cartão",emoji:'<i class="fa-solid fa-credit-card"></i>',mandatory:2,
-   msg:"Compra suspeita de R$ 150. Seu cartão foi clonado!",
-   desc:"Notificação do banco: \"Compra aprovada em Florianópolis.\" Tu tá no Senac.",cost:150,penalty:{lazer:-25,food:-20,inv:-20},gainMul:0.65,costMul:1.45},
-  {id:"celular_roubado",name:"Celular Roubado",emoji:'<i class="fa-solid fa-mobile-screen"></i>',mandatory:2,
-   msg:"Te arrancaram o celular na saída do Senac. Sem volta.",
-   desc:"Tu tava tranquilo e do nada um cara pegou teu celular e saiu correndo. Polícia não vai fazer nada.",cost:120,penalty:{lazer:-25,food:-15,inv:-20},gainMul:0.7,costMul:1.4},
-  {id:"material_escolar",name:"Material Escolar Emergencial",emoji:'<i class="fa-solid fa-book"></i>',mandatory:1,
-   msg:"Caderno acabou, caneta estourou e o livro didático precisa ser trocado.",
-   desc:"Mês de provas e o material não aguenta mais. Comprar tudo de uma vez pesa no bolso.",cost:60,penalty:{lazer:-10,food:-15,inv:-10},gainMul:0.85,costMul:1.3},
-  {id:"aniversario_amigo",name:"Aniversário do Amigo",emoji:'<i class="fa-solid fa-cake-candles"></i>',mandatory:1,
-   msg:"Teu melhor amigo tá fazendo aniversário. Presente, transporte e contribuição pra festa.",
-   desc:"Amizade é caríssima. Mas tu não pode faltar no aniversário do parça.",cost:55,penalty:{lazer:-15,food:-10,inv:-10},gainMul:0.85,costMul:1.25},
-  {id:"vale_refeicao_estourado",name:"Vale Refeição Estourado",emoji:'<i class="fa-solid fa-utensils"></i>',mandatory:1,
-   msg:"Gastou todo o vale refeição na segunda. Restante do mês sem comida decente.",
-   desc:"Marmita de R$ 10 todo dia saindo do bolso. OVR não cobre mais nada.",cost:50,penalty:{lazer:-10,food:-25,inv:-10},gainMul:0.85,costMul:1.25}
+  {id:"golpe_pix",name:"Golpe do Pix",emoji:'<i class="fa-solid fa-credit-card"></i>',
+   msg:"Caiu um pix fantasma na tua conta. Algu\u00e9m errou e quer o dinheiro de volta \u2014 com juros.",
+   desc:"Transferiram R$ 80 por engano. Agora t\u00e3o cobrando R$ 100. Tu paga ou vira d\u00edvida.",
+   cost:100,e:{lazer:-8,food:-8,inv:-5},
+   consequence:{days:3,msg:"Golpe do Pix: juros acumularam! Perda de status.",e:{lazer:-10,food:-10,inv:-10}}},
+  {id:"emprestimo_fantasma",name:"Empr\u00e9stimo Fantasma",emoji:'<i class="fa-solid fa-mobile-screen"></i>',
+   msg:"Um app pegou seus dados e fez um empr\u00e9stimo no teu nome. R$ 100 aprovados, mas tu n\u00e3o pediu.",
+   desc:"Notifica\u00e7\u00e3o: \"Empr\u00e9stimo liberado!\" O app j\u00e1 come\u00e7ou a descontar do teu saldo.",
+   cost:80,e:{lazer:-10,food:-5,inv:-8},
+   consequence:{days:5,msg:"Empr\u00e9stimo Fantasma: cobran\u00e7a continuou! Mais preju\u00edzo.",e:{lazer:-15,food:-10,inv:-12}}},
+  {id:"promocao_fake",name:"Promo\u00e7\u00e3o Golpista",emoji:'<i class="fa-solid fa-tag"></i>',
+   msg:"50% OFF em tudo! Clicou e o app ativou uma assinatura de R$ 40/m\u00eas no teu nome.",
+   desc:"Parecia bom demais. Era. Agora tu t\u00e1 pagando sem usar.",
+   cost:40,e:{lazer:-5,food:-5,inv:-5},
+   consequence:{days:2,msg:"Assinatura golpista cobrou de novo! -R$ 40.",e:{money:-40,lazer:-3}}},
+  {id:"divida_familiar",name:"Pediu pra M\u00e3e",emoji:'<i class="fa-solid fa-user"></i>',
+   msg:"Sua m\u00e3e emprestou R$ 30 mas disse que vai cobrar todo dia at\u00e9 voltar.",
+   desc:"D\u00edvida familiar. N\u00e3o tem app que resolva. Paga ou perde o almo\u00e7o de domingo.",
+   cost:30,e:{lazer:-5,food:-5,inv:-3},
+   consequence:{days:2,msg:"M\u00e3e cobrou de novo! D\u00edvida familiar n\u00e3o perdoa.",e:{lazer:-8,food:-8}}},
+  {id:"clonagem_cartao",name:"Clonaram teu Cart\u00e3o",emoji:'<i class="fa-solid fa-credit-card"></i>',
+   msg:"Compra suspeita de R$ 100! Seu cart\u00e3o foi clonado em Florian\u00f3polis.",
+   desc:"Tu t\u00e1 no Senac mas o banco acha que tu t\u00e1 viajando. Preju\u00edzo certo.",
+   cost:100,e:{lazer:-10,food:-8,inv:-5},
+   consequence:{days:7,msg:"Clonagem do cart\u00e3o: banco cobrou mais juros!",e:{money:-50,lazer:-8,food:-5}}},
+  {id:"celular_roubado",name:"Celular Roubado",emoji:'<i class="fa-solid fa-mobile-screen"></i>',
+   msg:"Te arrancaram o celular na sa\u00edda do Senac. Sem volta, sem chance.",
+   desc:"Precisa de celular novo. Plano, chip, capa... tudo de novo.",
+   cost:80,e:{lazer:-12,food:-5,inv:-8},
+   consequence:{days:4,msg:"Celular roubado: sem ele tu perdeu prazos e contatos.",e:{lazer:-10,inv:-8}}},
+  {id:"material_escolar",name:"Material Escolar Emergencial",emoji:'<i class="fa-solid fa-book"></i>',
+   msg:"Caderno acabou, caneta estourou e o livro precisa ser trocado. Tudo de uma vez.",
+   desc:"M\u00eas de provas e o material n\u00e3o aguenta. Comprar tudo pesa no bolso.",
+   cost:50,e:{lazer:-5,food:-5,inv:-3},
+   consequence:{days:3,msg:"Material escolar: precisou comprar mais coisas.",e:{money:-30,inv:-5}}},
+  {id:"aniversario_amigo",name:"Anivers\u00e1rio do Amigo",emoji:'<i class="fa-solid fa-cake-candles"></i>',
+   msg:"Teu melhor amigo t\u00e1 fazendo anivers\u00e1rio. Presente, transporte e contribui\u00e7\u00e3o pra festa.",
+   desc:"Amizade \u00e9 car\u00edssima. Mas tu n\u00e3o pode faltar no anivers\u00e1rio do parceiro.",
+   cost:45,e:{lazer:-8,food:-3,inv:-3},
+   consequence:{days:5,msg:"Anivers\u00e1rio do amigo: rol\u00ea extra que n\u00e3o esperavas.",e:{lazer:-5,food:-5}}},
+  {id:"vale_refeicao_estourado",name:"Vale Refei\u00e7\u00e3o Estourado",emoji:'<i class="fa-solid fa-utensils"></i>',
+   msg:"Gastou todo o vale refei\u00e7\u00e3o na segunda. Restante do m\u00eas sem comida decente.",
+   desc:"Marmita saindo do bolso todo dia. OVR n\u00e3o cobre mais nada.",
+   cost:30,e:{food:-10,lazer:-5,inv:-3},
+   consequence:{days:3,msg:"Vale estourado: semana inteira sem comida boa.",e:{food:-12,lazer:-5}}}
 ];
 let activeSpecial=null;
 let specialMandatoryLeft=0;
 
+const randomEvents=[
+  {name:"Pix Fantasma",emoji:'<i class="fa-solid fa-money-bill-transfer"></i>',msg:"Caiu um pix de R$ 40 na tua conta. Tu não sabe de onde veio.",e:{money:40,lazer:5},type:"good",minDay:3},
+  {name:"Desconto Escondido",emoji:'<i class="fa-solid fa-tag"></i>',msg:"O mercado tava com promoção e economizou R$ 30.",e:{money:30,food:5},type:"good",minDay:2},
+  {name:"Amigo Te Pagou",emoji:'<i class="fa-solid fa-handshake"></i>',msg:"Teu amigo lembrou que te devia R$ 25 e mandou o pix.",e:{money:25,lazer:5},type:"good",minDay:3},
+  {name:"Cashback Surpresa",emoji:'<i class="fa-solid fa-percent"></i>',msg:"O app devolveu R$ 15 da tua última compra.",e:{money:15,inv:3},type:"good",minDay:4},
+  {name:"Mesada da Vó",emoji:'<i class="fa-solid fa-heart"></i>',msg:"Tua avó te mandou R$ 50. Compra um lanche, neto.",e:{money:50,lazer:5,food:5},type:"good",minDay:2},
+  {name:"Lanche Grátis",emoji:'<i class="fa-solid fa-cookie"></i>',msg:"A dona da padaria te deu um pão de queijo grátis.",e:{food:10,lazer:3},type:"good",minDay:2},
+  {name:"Multa de Trânsito",emoji:'<i class="fa-solid fa-car-burst"></i>',msg:"Estacionou na área proibida. Multa de R$ 50.",e:{money:-50,lazer:-8},type:"bad",minDay:3},
+  {name:"Conta Esquecida",emoji:'<i class="fa-solid fa-file-invoice"></i>',msg:"Esqueceu de pagar uma conta. Juros de R$ 35.",e:{money:-35,inv:-5},type:"bad",minDay:4},
+  {name:"Celular Trincou",emoji:'<i class="fa-solid fa-mobile-screen"></i>',msg:"O celular escapou e trincou. Conserto: R$ 80.",e:{money:-80,lazer:-10},type:"bad",minDay:5},
+  {name:"Golpe do PIX",emoji:'<i class="fa-solid fa-triangle-exclamation"></i>',msg:"Clicou num link falso. R$ 60 sumiram.",e:{money:-60,lazer:-5,inv:-8},type:"bad",minDay:4},
+  {name:"Remédio Emergencial",emoji:'<i class="fa-solid fa-pills"></i>',msg:"Passou mal e comprou remédio. R$ 30.",e:{money:-30,food:-5},type:"bad",minDay:2},
+  {name:"Conserto da Bike",emoji:'<i class="fa-solid fa-bicycle"></i>',msg:"A corrente quebrou. Conserto: R$ 25.",e:{money:-25,lazer:-3},type:"bad",minDay:3},
+  {name:"Vazamento em Casa",emoji:'<i class="fa-solid fa-droplet"></i>',msg:"O cano estourou. Encanador: R$ 70.",e:{money:-70,lazer:-8,inv:-3},type:"bad",minDay:6},
+  {name:"Comida Estragada",emoji:'<i class="fa-solid fa-skull-crossbones"></i>',msg:"A marmita tava estragada. Passou mal.",e:{food:-15,lazer:-5},type:"bad",minDay:2},
+  {name:"Achou na Rua",emoji:'<i class="fa-solid fa-magnifying-glass"></i>',msg:"Achou R$ 20 caído no chão. Dia de sorte!",e:{money:20,lazer:5},type:"good",minDay:2},
+  {name:"Presente de Aniversário",emoji:'<i class="fa-solid fa-gift"></i>',msg:"Te deram um presente adiantado. R$ 30!",e:{money:30,lazer:8},type:"good",minDay:3},
+  {name:"Gasto Fantasma",emoji:'<i class="fa-solid fa-ghost"></i>',msg:"O app cobrou uma assinatura esquecida. -R$ 25.",e:{money:-25,inv:-3},type:"bad",minDay:3},
+  {name:"Bicicletada",emoji:'<i class="fa-solid fa-person-biking"></i>',msg:"Pedalou o dia todo. Exercício grátis.",e:{lazer:8,food:-2},type:"good",minDay:2},
+  {name:"Noite de Estudos",emoji:'<i class="fa-solid fa-graduation-cap"></i>',msg:"Estudou a noite toda. Investe no futuro.",e:{inv:10,lazer:-5},type:"good",minDay:4},
+  {name:"Rolê de Graça",emoji:'<i class="fa-solid fa-music"></i>',msg:"Show gratuito na praça. Lazer sem gastar.",e:{lazer:12,food:-1},type:"good",minDay:2},
+  {name:"Estacionamento Irregular",emoji:'<i class="fa-solid fa-square-parking"></i>',msg:"Multaram o carro. R$ 40 de multa.",e:{money:-40,lazer:-5},type:"bad",minDay:4},
+  {name:"Doação Voluntária",emoji:'<i class="fa-solid fa-hand-holding-heart"></i>',msg:"Doou R$ 15 pra uma causa boa.",e:{money:-15,lazer:8,inv:3},type:"good",minDay:5},
+  {name:"Roubo de Bolso",emoji:'<i class="fa-solid fa-mask"></i>',msg:"Roubaram R$ 30 do teu bolso.",e:{money:-30,lazer:-8},type:"bad",minDay:3},
+  {name:"Cupom de Amigo",emoji:'<i class="fa-solid fa-ticket"></i>',msg:"Cupom de R$ 15 OFF do teu amigo.",e:{money:15,food:3},type:"good",minDay:3},
+  {name:"Conta de Água",emoji:'<i class="fa-solid fa-faucet-drip"></i>',msg:"Conta de água R$ 40 mais cara.",e:{money:-40,lazer:-3},type:"bad",minDay:4},
+  {name:"Venda de Livro",emoji:'<i class="fa-solid fa-book-open"></i>',msg:"Vendeu um livro. R$ 20 no bolso.",e:{money:20,inv:2},type:"good",minDay:3},
+  {name:"Pneu Furado",emoji:'<i class="fa-solid fa-circle-exclamation"></i>',msg:"Furou o pneu. Troca: R$ 20.",e:{money:-20,lazer:-4},type:"bad",minDay:3},
+  {name:"Voluntariado",emoji:'<i class="fa-solid fa-people-group"></i>',msg:"Ajudou num projeto comunitário.",e:{lazer:6,inv:4},type:"good",minDay:5},
+  {name:"Promo Relâmpago",emoji:'<i class="fa-solid fa-bolt-lightning"></i>',msg:"Economizou R$ 25 nas compras.",e:{money:25,food:5},type:"good",minDay:3},
+  {name:"Consulta Médica",emoji:'<i class="fa-solid fa-stethoscope"></i>',msg:"Consulta médica: R$ 60.",e:{money:-60,lazer:-3},type:"bad",minDay:4},
+  {name:"Ganhou no Jogo",emoji:'<i class="fa-solid fa-dice"></i>',msg:"Ganhou R$ 30 no jogo. Sorte!",e:{money:30,lazer:5},type:"good",minDay:5},
+  {name:"Cartão Clonado",emoji:'<i class="fa-solid fa-credit-card"></i>',msg:"Cartão clonado. Compra de R$ 45.",e:{money:-45,lazer:-8,inv:-5},type:"bad",minDay:6},
+  {name:"Encontro de Graça",emoji:'<i class="fa-solid fa-heart"></i>',msg:"Encontro no parque. Zero custo.",e:{lazer:15,food:-2},type:"good",minDay:3},
+  {name:"Esqueceu a Marmita",emoji:'<i class="fa-solid fa-box"></i>',msg:"Esqueceu a marmita. Comida cara.",e:{money:-20,food:-5},type:"bad",minDay:2},
+  {name:"Presente dos Amigos",emoji:'<i class="fa-solid fa-people-arrows"></i>',msg:"Amigos te deram R$ 30 de presente.",e:{money:30,lazer:10},type:"good",minDay:4},
+  {name:"Multa Leve",emoji:'<i class="fa-solid fa-gavel"></i>',msg:"Multa leve. -R$ 20.",e:{money:-20,lazer:-3},type:"bad",minDay:3},
+  {name:"Dinheiro no Bolso Velho",emoji:'<i class="fa-solid fa-pocket"></i>',msg:"Encontrou R$ 25 no casaco velho.",e:{money:25,lazer:5},type:"good",minDay:2},
+  {name:"Conta de Internet",emoji:'<i class="fa-solid fa-wifi"></i>',msg:"Internet subiu. -R$ 30.",e:{money:-30,lazer:-5},type:"bad",minDay:4},
+  {name:"Troca Justa",emoji:'<i class="fa-solid fa-arrows-rotate"></i>',msg:"Trocou item com colega. Ambos ganharam.",e:{inv:5,lazer:5},type:"good",minDay:3},
+  {name:"Atraso na Fila",emoji:'<i class="fa-solid fa-clock"></i>',msg:"1 hora na fila do banco.",e:{lazer:-8,inv:-2},type:"bad",minDay:3},
+  {name:"Achado no Brechó",emoji:'<i class="fa-solid fa-shirt"></i>',msg:"Roupa boa por R$ 5 no brechó.",e:{money:-5,lazer:6},type:"good",minDay:3},
+  {name:"Dívida Compartilhada",emoji:'<i class="fa-solid fa-people-group"></i>',msg:"Ficou responsável pela conta. -R$ 35.",e:{money:-35,lazer:-3},type:"bad",minDay:4},
+  {name:"Cashback Grande",emoji:'<i class="fa-solid fa-piggy-bank"></i>',msg:"Cashback acumulou: R$ 40.",e:{money:40,inv:5},type:"good",minDay:5},
+  {name:"Festa de Graça",emoji:'<i class="fa-solid fa-champagne-glasses"></i>',msg:"Festa grátis no bairro.",e:{lazer:14,food:5},type:"good",minDay:3},
+  {name:"Perdeu o Ônibus",emoji:'<i class="fa-solid fa-bus-simple"></i>',msg:"Ônibus saiu. Teve que ir a pé.",e:{lazer:-6,food:-2},type:"bad",minDay:2},
+  {name:"Quebrou o Fone",emoji:'<i class="fa-solid fa-headphones"></i>',msg:"Fone quebrou. Novo: R$ 30.",e:{money:-30,lazer:-5},type:"bad",minDay:3},
+  {name:"Bônus do Trampo",emoji:'<i class="fa-solid fa-sack-dollar"></i>',msg:"Chefe deu R$ 35 de bônus!",e:{money:35,lazer:5,inv:3},type:"good",minDay:5},
+  {name:"Roubo de Bike",emoji:'<i class="fa-solid fa-bicycle"></i>',msg:"Roubaram tua bike. Prejuízo: R$ 100.",e:{money:-100,lazer:-15},type:"bad",minDay:7},
+  {name:"Doação de Sangue",emoji:'<i class="fa-solid fa-droplet"></i>',msg:"Doadu sangue. Ganhou R$ 15 + lanche.",e:{money:15,food:8,lazer:3},type:"good",minDay:4},
+  {name:"Acidente Leve",emoji:'<i class="fa-solid fa-band-aid"></i>',msg:"Machucou. Curativo: R$ 25.",e:{money:-25,lazer:-6,food:-3},type:"bad",minDay:3},
+  {name:"Limpeza na Casa",emoji:'<i class="fa-solid fa-broom"></i>',msg:"Limpu a casa. Gastou R$ 15.",e:{money:-15,lazer:5,inv:3},type:"good",minDay:3},
+  {name:"Torneio Online",emoji:'<i class="fa-solid fa-gamepad"></i>',msg:"Ganhou torneio. R$ 25!",e:{money:25,lazer:10},type:"good",minDay:4},
+  {name:"Indenização",emoji:'<i class="fa-solid fa-comment-dots"></i>',msg:"Reclamou e ganhou R$ 20.",e:{money:20,inv:3},type:"good",minDay:5},
+  {name:"Gasto Transporte",emoji:'<i class="fa-solid fa-gas-pump"></i>',msg:"Combustível subiu. -R$ 30.",e:{money:-30,lazer:-3},type:"bad",minDay:4},
+  {name:"Parceria no Senac",emoji:'<i class="fa-solid fa-people-arrows"></i>',msg:"Professor deu pontos extras.",e:{inv:8,lazer:3},type:"good",minDay:3},
+  {name:"Corre Corre",emoji:'<i class="fa-solid fa-person-running"></i>',msg:"Correu atrás do ônibus.",e:{lazer:-3,food:-2},type:"bad",minDay:2},
+  {name:"Ajudou um Necessitado",emoji:'<i class="fa-solid fa-hand-holding-dollar"></i>',msg:"Deu R$ 10 pra quem precisava.",e:{money:-10,lazer:8,inv:4},type:"good",minDay:3},
+  {name:"Estacionamento",emoji:'<i class="fa-solid fa-square-parking"></i>',msg:"Pagar estacionamento: R$ 15.",e:{money:-15,lazer:-2},type:"bad",minDay:3},
+  {name:"Oferta de Emprego",emoji:'<i class="fa-solid fa-briefcase"></i>',msg:"Vaga de estágio! Manda o CV!",e:{inv:10,lazer:5},type:"good",minDay:6},
+  {name:"Encomenda Extraviada",emoji:'<i class="fa-solid fa-box"></i>',msg:"Correio perdeu. R$ 35 perdidos.",e:{money:-35,lazer:-5},type:"bad",minDay:4},
+  {name:"Economia no Mercado",emoji:'<i class="fa-solid fa-store"></i>',msg:"Economizou R$ 20 nas compras.",e:{money:20,food:3},type:"good",minDay:3},
+  {name:"Multa de Barulho",emoji:'<i class="fa-solid fa-volume-high"></i>',msg:"Vizinha reclamou. Multa R$ 30.",e:{money:-30,lazer:-5},type:"bad",minDay:4},
+  {name:"Aula Particular",emoji:'<i class="fa-solid fa-chalkboard-user"></i>',msg:"Deu aula e ganhou R$ 45.",e:{money:45,inv:5,lazer:-3},type:"good",minDay:5},
+  {name:"Furto no Senac",emoji:'<i class="fa-solid fa-person-falling-burst"></i>',msg:"Roubaram lanche. -R$ 20.",e:{money:-20,food:-5},type:"bad",minDay:3},
+  {name:"Pontos do Cartão",emoji:'<i class="fa-solid fa-credit-card"></i>',msg:"Pontos viraram R$ 20.",e:{money:20,lazer:3},type:"good",minDay:4},
+  {name:"Reparo em Casa",emoji:'<i class="fa-solid fa-wrench"></i>',msg:"Torneira pingava. Reparo: R$ 35.",e:{money:-35,lazer:-3},type:"bad",minDay:4},
+  {name:"Aula de Graça",emoji:'<i class="fa-solid fa-chalkboard"></i>',msg:"Aula extra grátis. Investimento!",e:{inv:8,lazer:2},type:"good",minDay:3},
+  {name:"Gorjeta Boa",emoji:'<i class="fa-solid fa-hand-holding-dollar"></i>',msg:"Ganhou R$ 15 de gorjeta.",e:{money:15,lazer:5},type:"good",minDay:3},
+  {name:"Raspadinha",emoji:'<i class="fa-solid fa-ticket"></i>',msg:"Raspadinha deu R$ 10!",e:{money:10,lazer:3},type:"good",minDay:2},
+  {name:"Conta Dupla",emoji:'<i class="fa-solid fa-receipt"></i>',msg:"Restaurante cobrou duas vezes. -R$ 40.",e:{money:-40,lazer:-5},type:"bad",minDay:4},
+  {name:"Ajuda no Senac",emoji:'<i class="fa-solid fa-graduation-cap"></i>',msg:"Professor deu nota extra.",e:{inv:6,lazer:3},type:"good",minDay:3},
+  {name:"Gasto com Roupa",emoji:'<i class="fa-solid fa-shirt"></i>',msg:"Comprou roupa pro evento. -R$ 40.",e:{money:-40,lazer:-2},type:"bad",minDay:4},
+  {name:"Venda de Eletrônico",emoji:'<i class="fa-solid fa-laptop"></i>',msg:"Vendeu celular velho. R$ 70!",e:{money:70,inv:5},type:"good",minDay:6},
+  {name:"Multa de Velocidade",emoji:'<i class="fa-solid fa-gauge-high"></i>',msg:"Radar te multou. R$ 50.",e:{money:-50,lazer:-6},type:"bad",minDay:5},
+  {name:"Soneca no Intervalo",emoji:'<i class="fa-solid fa-bed"></i>',msg:"Soneca no intervalo. Recarregou!",e:{lazer:8,food:-2},type:"good",minDay:2},
+  {name:"Compra por Impulso",emoji:'<i class="fa-solid fa-cart-shopping"></i>',msg:"Comprou desnecessário. -R$ 30.",e:{money:-30,lazer:3},type:"bad",minDay:3},
+  {name:"Trabalho Voluntário",emoji:'<i class="fa-solid fa-handshake"></i>',msg:"Campanha solidária. Experiência.",e:{inv:6,lazer:4},type:"good",minDay:4},
+  {name:"Enchente",emoji:'<i class="fa-solid fa-house-flood-water"></i>',msg:"Alagou. Perdeu comida. -R$ 40.",e:{money:-40,food:-10,lazer:-8},type:"bad",minDay:6},
+  {name:"Bônus Pontualidade",emoji:'<i class="fa-solid fa-clock"></i>',msg:"R$ 10 por ser pontual.",e:{money:10,inv:2},type:"good",minDay:3},
+  {name:"Jogo de Aposta",emoji:'<i class="fa-solid fa-dice"></i>',msg:"Perdeu R$ 20 apostando.",e:{money:-20,lazer:-5},type:"bad",minDay:4},
+  {name:"Passeio no Parque",emoji:'<i class="fa-solid fa-tree"></i>',msg:"Parque público. Zero custo.",e:{lazer:10,food:-1},type:"good",minDay:2},
+  {name:"Prejuízo Online",emoji:'<i class="fa-solid fa-gamepad"></i>',msg:"Perdeu R$ 25 apostando online.",e:{money:-25,lazer:-8},type:"bad",minDay:4},
+  {name:"Oferta Relâmpago",emoji:'<i class="fa-solid fa-bolt-lightning"></i>',msg:"Economizou R$ 15 na oferta.",e:{money:15,food:3},type:"good",minDay:3},
+  {name:"Amigo Não Pagou",emoji:'<i class="fa-solid fa-user-minus"></i>',msg:"Amigo devolveu só metade. -R$ 15.",e:{money:-15,lazer:-5},type:"bad",minDay:4},
+  {name:"Mini Empreendimento",emoji:'<i class="fa-solid fa-store"></i>',msg:"Vendeu bolo de pote. R$ 35!",e:{money:35,inv:5,lazer:-2},type:"good",minDay:5},
+  {name:"Dentista",emoji:'<i class="fa-solid fa-tooth"></i>',msg:"Limpeza dentária: R$ 45.",e:{money:-45,lazer:-3},type:"bad",minDay:5},
+  {name:"Cashback Gasolina",emoji:'<i class="fa-solid fa-gas-pump"></i>',msg:"Cashback de R$ 10.",e:{money:10,lazer:2},type:"good",minDay:3},
+  {name:"Multa Zona Azul",emoji:'<i class="fa-solid fa-parking"></i>',msg:"Esqueceu o parquímetro. R$ 30.",e:{money:-30,lazer:-4},type:"bad",minDay:4},
+  {name:"Coleta Seletiva",emoji:'<i class="fa-solid fa-recycle"></i>',msg:"Vendeu recicláveis. R$ 8.",e:{money:8,inv:3,lazer:2},type:"good",minDay:3},
+  {name:"Roubo de Fone",emoji:'<i class="fa-solid fa-headphones"></i>',msg:"Roubaram teu fone. -R$ 25.",e:{money:-25,lazer:-6},type:"bad",minDay:3},
+  {name:"Conta de Gás",emoji:'<i class="fa-solid fa-fire"></i>',msg:"Troca da botija: R$ 50.",e:{money:-50,food:-5},type:"bad",minDay:4},
+  {name:"Pontos de Fidelidade",emoji:'<i class="fa-solid fa-star"></i>',msg:"Trocou pontos por R$ 20.",e:{money:20,lazer:3},type:"good",minDay:4},
+  {name:"Compra Errada",emoji:'<i class="fa-solid fa-cart-shopping"></i>',msg:"Comprou o tamanho errado. -R$ 20.",e:{money:-20,lazer:-3},type:"bad",minDay:3},
+  {name:"Parceria Estudantil",emoji:'<i class="fa-solid fa-user-graduate"></i>',msg:"Trabalho com nota máxima.",e:{inv:5,lazer:5},type:"good",minDay:3},
+  {name:"Chuvosa",emoji:'<i class="fa-solid fa-cloud-rain"></i>',msg:"Caminhou molhado até o carro.",e:{lazer:-6,food:-2},type:"bad",minDay:2},
+  {name:"Mini Curso Grátis",emoji:'<i class="fa-solid fa-laptop-code"></i>',msg:"Curso online grátis. Novo conhecimento!",e:{inv:6,lazer:2},type:"good",minDay:4},
+  {name:"Divida com Amigos",emoji:'<i class="fa-solid fa-user-group"></i>',msg:"Cobraram R$ 20 do rolê.",e:{money:-20,lazer:-3},type:"bad",minDay:3},
+  {name:"Dinheiro no Bolso",emoji:'<i class="fa-solid fa-coins"></i>',msg:"Encontrou R$ 8 na jaqueta.",e:{money:8,lazer:3},type:"good",minDay:2},
+  {name:"Remédio",emoji:'<i class="fa-solid fa-pills"></i>',msg:"Remédio emergencial: R$ 20.",e:{money:-20,food:-3},type:"bad",minDay:3},
+  {name:"Venda de Livro",emoji:'<i class="fa-solid fa-book"></i>',msg:"Vendeu livro didático. R$ 30!",e:{money:30,inv:3},type:"good",minDay:4},
+  {name:"Desconto Aniversário",emoji:'<i class="fa-solid fa-cake-candles"></i>',msg:"Apps deram desconto. R$ 25!",e:{money:25,lazer:5},type:"good",minDay:3},
+  {name:"Perda no Uber",emoji:'<i class="fa-solid fa-car"></i>',msg:"Esqueceu coisa no Uber. -R$ 15.",e:{money:-15,lazer:-4},type:"bad",minDay:3},
+  {name:"Natação Grátis",emoji:'<i class="fa-solid fa-person-swimming"></i>',msg:"Natação na praça esportiva.",e:{lazer:10,food:-2},type:"good",minDay:4},
+  {name:"Cobrança Indevida",emoji:'<i class="fa-solid fa-ban"></i>',msg:"Banco cobrou taxa fantasma. -R$ 15.",e:{money:-15,lazer:-3},type:"bad",minDay:4},
+  {name:"Mentoria Grátis",emoji:'<i class="fa-solid fa-chalkboard-user"></i>',msg:"Mentoria grátis. Conhecimento!",e:{inv:8,lazer:3},type:"good",minDay:5},
+  {name:"Compra Desnecessária",emoji:'<i class="fa-solid fa-cart-plus"></i>',msg:"Comprou o que não precisava. -R$ 35.",e:{money:-35,lazer:2},type:"bad",minDay:3},
+  {name:"Voluntariado Senac",emoji:'<i class="fa-solid fa-people-carry-box"></i>',msg:"Ajudou no evento do Senac.",e:{inv:5,lazer:4},type:"good",minDay:4},
+  {name:"Fio Desencapado",emoji:'<i class="fa-solid fa-plug"></i>',msg:"Eletricista: R$ 40.",e:{money:-40,lazer:-5},type:"bad",minDay:5},
+  {name:"Vale-Presente",emoji:'<i class="fa-solid fa-gift"></i>',msg:"Ganhou vale-presente de R$ 30.",e:{money:30,lazer:5},type:"good",minDay:3},
+  {name:"Carro Empenado",emoji:'<i class="fa-solid fa-car-burst"></i>',msg:"Mecânico: R$ 80.",e:{money:-80,lazer:-10},type:"bad",minDay:6},
+  {name:"Freela Fim de Semana",emoji:'<i class="fa-solid fa-briefcase"></i>',msg:"Trabalhou no fim de semana. R$ 50!",e:{money:50,lazer:-5,inv:3},type:"good",minDay:5},
+  {name:"Venda Online",emoji:'<i class="fa-solid fa-cart-shopping"></i>',msg:"Vendeu coisa velha. R$ 35!",e:{money:35,lazer:3,inv:2},type:"good",minDay:5},
+  {name:"Compra no Brechó",emoji:'<i class="fa-solid fa-shirt"></i>',msg:"Comprou roupa barata. R$ 5.",e:{money:-5,lazer:4},type:"good",minDay:3}
+];
+
+
+function addConsequence(dayOffset,msg,e){
+  pendingConsequences.push({day:S.day+dayOffset,msg:msg,e:e});
+}
+
 let usedCards=[];
+  S.usedSpecials=[];
+  pendingConsequences=[];
 const S_=(msg,e,g)=>({msg,e:{...(e||{})},gain:g||0});
 const SC=(chance,good,bad)=>({chance,good,bad});
 const cards=[
@@ -59,13 +201,13 @@ const cards=[
   secret:SC(.30,S_("O garçom errou o pedido e te deu o prato maior. Win!",{food:5,lazer:3}),S_("Tinha um pelo na comida. Que nojo, véi.",{food:-4,lazer:-3}))},
 {t:"Marmita de casa",d:"Mesma de sempre. Caseiro e barato, mas não é lá essas coisas.",c:5,e:{food:10,inv:5,lazer:-3},
   secret:SC(.25,S_("A marmita ficou tão boa que o colega pagou pra comer. Sério.",{food:2},10),null)},
-{t:"Cozinhar pra semana",d:"Domingo na cozinha. Trabalho chato mas economiza horrores.",c:30,e:{food:27,inv:9,lazer:-9},
+{t:"Cozinhar pra semana",d:"Domingo na cozinha. Trabalho chato mas economiza horrores.",c:30,e:{food:18,inv:6,lazer:-7},
   secret:SC(.20,S_("Postou a receita e viralizou. Vendeu o segredo por R$ 15.",{inv:5},15),null)},
 {t:"Fast-food com cupom",d:"App com desconto. Rápido e gostoso, mas tu sabe como é.",c:15,e:{food:7,lazer:7,inv:-3},
   secret:SC(.35,null,S_("Passou mal de madrugada. Perdeu o dia todo.",{food:-8,lazer:-6}))},
 {t:"Lanche da tarde",d:"A fome bateu forte. Gasta agora ou segura até a noite?",c:8,e:{food:9,lazer:2,inv:-2},
   secret:SC(.20,null,S_("O lanche tava estragado. Noite no hospital.",{food:-6,lazer:-5,inv:-3}))},
-{t:"Churrasco com a galera",d:"Cada um leva uma coisa. Convívio bom, comida melhor.",c:15,e:{lazer:18,food:12,inv:-5},
+{t:"Churrasco com a galera",d:"Cada um leva uma coisa. Convívio bom, comida melhor.",c:15,e:{lazer:12,food:8,inv:-3},
   secret:SC(.25,S_("Tu trouxe o melhor prato e todo mundo babou. Moral lá em cima.",{lazer:5,food:3}),null)},
 {t:"Delivery preguiçoso",d:"Tava exausto, não dava pra cozinhar. Pedi pelo app.",c:25,e:{food:9,lazer:6,inv:-5},
   secret:SC(.30,null,S_("Atrasou 2 horas. Comida fria, noite perdida.",{lazer:-5,food:-4}))},
@@ -77,7 +219,7 @@ const cards=[
 /* === LAZER === */
 {t:"Cinema com a turma",d:"Filme novo e pipoca. Caro mas tem vez que vale a pena.",c:25,e:{lazer:19,food:-4,inv:-5},
   secret:SC(.25,S_("O filme era sobre finanças. Até que aprendi algo.",{inv:6,lazer:3}),S_("O som estourou no meio do filme. Péssimo.",{lazer:-4}))},
-{t:"Show ao vivo",d:"Banda que tu gosta. Entrada salgada mas a experiência é única.",c:40,e:{lazer:22,food:-4,inv:-7},
+{t:"Show ao vivo",d:"Banda que tu gosta. Entrada salgada mas a experiência é única.",c:40,e:{lazer:15,food:-3,inv:-5},
   secret:SC(.20,S_("Foi backstage e conheceu a banda. Dia de nunca esquecer.",{lazer:10}),S_("Choveu e tu pegou gripe na hora.",{food:-5,lazer:-8}))},
 {t:"Lanchonete com os parça",d:"Rolê na lanchonete do bairro. Papo bom e combos baratos.",c:15,e:{lazer:16,food:3,inv:-5},
   secret:SC(.30,S_("Um amigo te ligou pra um freela bom. Contato é tudo.",{inv:8,lazer:3}),S_("Gastou demais e o papo não fluiu.",{lazer:-3,inv:-4}))},
@@ -89,29 +231,29 @@ const cards=[
 /* === INVESTIMENTOS / EDUCAÇÃO === */
 {t:"Curso online",d:"Aula pro currículo. Investe no futuro mas gasta agora.",c:20,e:{inv:17,lazer:-5,food:-3},
   secret:SC(.25,S_("O certificado te ajudou a pegar um freela.",{inv:5},30),null)},
-{t:"Investimento arriscado",d:"Alguém promete retorno rápido. Pode ser golpe ou não.",c:35,e:{inv:24,lazer:-7,food:-6},
+{t:"Investimento arriscado",d:"Alguém promete retorno rápido. Pode ser golpe ou não.",c:35,e:{inv:16,lazer:-5,food:-4},
   secret:SC(.40,S_("Deu sorte! Rendeu o dobro.",{inv:10},50),S_("Perdeu tudo. Golpe clássico.",{inv:-15,lazer:-8,food:-5}))},
 {t:"Comprar ações",d:"Ação promissora. Pode subir ou despencar.",c:25,e:{inv:18,lazer:-6,food:-4},
   secret:SC(.35,S_("Subiu 40%. Tu lucrou bem.",{inv:8},40),S_("Despencou. Prejuízo pesado.",{inv:-12,lazer:-5,food:-3}))},
-{t:"Inscrição pra concurso",d:"Concurso bom. Investe agora, o retorno vem depois.",c:35,e:{inv:20,lazer:-12,food:-5},
+{t:"Inscrição pra concurso",d:"Concurso bom. Investe agora, o retorno vem depois.",c:35,e:{inv:14,lazer:-8,food:-3},
   secret:SC(.15,S_("Tu passou! Renda garantida no futuro.",{inv:10,lazer:10,food:8},80),S_("Não foi dessa vez. Mas a experiência ajudou.",{inv:3,lazer:-3}))},
 {t:"Aprender a investir",d:"Conta na corretora e estudo básico. Primeiro passo.",c:5,e:{inv:15,lazer:-6,food:-2},
   secret:SC(.30,S_("Primeiro investimento rendeu 15%. Vício bom.",{inv:5},15),null)},
 
 /* === TRABALHO / RENDA === */
-{t:"Hora extra no trampo",d:"Descansa menos, ganha mais. Troca tempo por grana.",c:0,e:{inv:10,lazer:-14,food:-7},gain:35,
+{t:"Hora extra no trampo",d:"Descansa menos, ganha mais. Troca tempo por grana.",c:0,e:{inv:6,lazer:-10,food:-5},gain:20,
   secret:SC(.30,S_("O chefe notou e te deu bônus.",{inv:3},25),S_("Exaustão total. Errou tudo no trabalho.",{lazer:-5,inv:-6}))},
-{t:"Freela rápido",d:"Serviço pontual. Rende bem mas tira teu tempo livre.",c:0,e:{lazer:-8,inv:6,food:-2},gain:50,
+{t:"Freela rápido",d:"Serviço pontual. Rende bem mas tira teu tempo livre.",c:0,e:{lazer:-6,inv:4,food:-2},gain:30,
   secret:SC(.20,S_("Cliente curtiu. Já te chamou pra próxima.",{inv:5},50),null)},
-{t:"Bolo de pote",d:"Tu é a galera fizeram bolo de pote pra vender no Senac. Rendeu bem.",c:0,e:{inv:4,lazer:3,food:1},gain:30,
+{t:"Bolo de pote",d:"Tu é a galera fizeram bolo de pote pra vender no Senac. Rendeu bem.",c:0,e:{inv:3,lazer:2,food:1},gain:18,
   secret:SC(.25,S_("Vendeu tudo em 1 hora. Virou empreendedor.",{inv:3,lazer:2}),S_("Não vendeu nada. Sobrou bolo na sua casa.",{inv:-3,lazer:-2}))},
-{t:"Mesada extra da vó",d:"Vó teve pena e soltou um dinheirinho extra. Amor de avó não tem preço.",c:0,e:{inv:8,lazer:8,food:8},gain:60,
+{t:"Mesada extra da vó",d:"Vó teve pena e soltou um dinheirinho extra. Amor de avó não tem preço.",c:0,e:{inv:5,lazer:5,food:5},gain:35,
   secret:SC(.25,S_("Vó disse que tu é o neto favorito. Ganhou mais um pouco.",{inv:5,lazer:5},20),S_("Vó cobrou de volta no dia seguinte. Amor tem preço sim.",{inv:-5,lazer:-5}))},
 
 /* === GASTOS FIXOS === */
-{t:"Conta de luz",d:"Conta veio salgada. Banho longo custa caro.",c:35,e:{food:-4,lazer:-3,inv:-4},
+{t:"Conta de luz",d:"Conta veio salgada. Banho longo custa caro.",c:35,e:{food:-4,lazer:-3,inv:-4},forced:true,
   secret:SC(.20,S_("Aprendeu a economizar. Conta do mês que vem cai 40%.",{inv:5,food:3}),null)},
-{t:"Recarga do celular",d:"Plano acabou. Sem internet não dá mas custa.",c:20,e:{food:-2,lazer:4,inv:7},
+{t:"Recarga do celular",d:"Plano acabou. Sem internet não dá mas custa.",c:20,e:{food:-2,lazer:3,inv:5},forced:true,
   secret:SC(.25,S_("Bônus de fidelidade. Crédito extra.",{inv:3},15),S_("Caiu um golpe no pix quando tu tava sem net.",{inv:-4,lazer:-3}))},
 
 /* === ESCOLHAS === */
@@ -123,17 +265,17 @@ const cards=[
   secret:SC(.30,S_("Pagou tudo no prazo. Boa.",{inv:5}),S_("Perdeu o controle. Fatura explodiu.",{inv:-10,lazer:-5,food:-4}))},
 {t:"Presente pra mãe",d:"Mãe merece. Amor não tem preço mas tem custo.",c:25,e:{lazer:8,food:-3,inv:-5},
   secret:SC(.20,S_("Mãe chorou de emoção. Não tem dinheiro que pague isso.",{lazer:10,food:5}),null)},
-{t:"Conta no azul",d:"Saldo positivo. Motivação pra continuar.",c:0,e:{lazer:6,food:3,inv:5},
+{t:"Conta no azul",d:"Saldo positivo. Motivação pra continuar.",c:0,e:{lazer:4,food:2,inv:3},forced:true,
   secret:SC(.10,S_("Banco te liberou limite maior. Oportunidade.",{inv:5},0),null)},
-{t:"Meta do mês",d:"Economia batida. Disciplina dá resultado.",c:0,e:{lazer:8,food:4,inv:8},
+{t:"Meta do mês",d:"Economia batida. Disciplina dá resultado.",c:0,e:{lazer:5,food:3,inv:5},forced:true,
   secret:SC(.10,S_("Teu mentor ficou impressionado. Indicação de emprego.",{inv:10},60),null)},
-{t:"Orçamento mensal",d:"Anotou tudo. Saber onde vai o dinheiro é poder.",c:0,e:{inv:10,lazer:-3,food:3},
+{t:"Orçamento mensal",d:"Anotou tudo. Saber onde vai o dinheiro é poder.",c:0,e:{inv:6,lazer:-2,food:2},forced:true,
   secret:SC(.15,S_("Descobriu um gasto escondido e cortou. Economia real.",{inv:5},20),null)},
-{t:"Sair sem gastar",d:"Praça, papo e risada. Amizade não precisa de dinheiro.",c:0,e:{lazer:16,food:-1,inv:2},
+{t:"Sair sem gastar",d:"Praça, papo e risada. Amizade não precisa de dinheiro.",c:0,e:{lazer:10,food:-1,inv:2},forced:true,
   secret:SC(.15,S_("O rolê rendeu uma ideia de negócio. Inspiração.",{inv:8}),null)},
-{t:"Abono Salarial",d:"Governo liberou. Dinheiro extra sem fazer nada.",c:0,e:{inv:4,lazer:5,food:5},gain:50,
+{t:"Abono Salarial",d:"Governo liberou. Dinheiro extra sem fazer nada.",c:0,e:{inv:3,lazer:3,food:3},gain:30,
   secret:SC(.15,S_("Abono caiu na conta. Dinheiro grátis!",{inv:3},30),S_("Gastou tudo em compra online. Arrependimento.",{lazer:-5,inv:-8}))},
-{t:"Fim de semana produtivo",d:"Estudou, cozinhou e organizou as contas. Dedicação.",c:0,e:{inv:12,lazer:-4,food:6},
+{t:"Fim de semana produtivo",d:"Estudou, cozinhou e organizou as contas. Dedicação.",c:0,e:{inv:8,lazer:-3,food:4},forced:true,
   secret:SC(.15,S_("Teu planejamento rendeu bônus surpresa no trampo.",{inv:3,food:2},25),null)},
 {t:"Namoradinha",d:"Saíste com alguém especial. Amor custa mas a alma agradece.",c:30,e:{lazer:20,food:2,inv:-9},
   secret:SC(.20,S_("A pessoa te presenteou de volta. Relação recíproca.",{lazer:5,inv:3},20),S_("Não deu certo. Dinheiro e emoção no lixo.",{lazer:-8,food:-3}))}
@@ -156,6 +298,7 @@ function render(){
   if(consecutiveDenies>=2)tags.push('<span class="effect neg"><i class="fa-solid fa-rotate"></i> '+consecutiveDenies+' negativas seguidas</span>');
   if(permanentGainMul<1)tags.push('<span class="effect neg"><i class="fa-solid fa-arrow-trend-down"></i> Ganhos -'+Math.round((1-permanentGainMul)*100)+'%</span>');
   if(permanentCostMul>1)tags.push('<span class="effect neg"><i class="fa-solid fa-arrow-trend-up"></i> Gastos +'+Math.round((permanentCostMul-1)*100)+'%</span>');
+  pendingConsequences.forEach(pc=>{tags.push('<span class="effect neg"><i class="fa-solid fa-clock"></i> Consequência em '+(pc.day-S.day)+' dias</span>')});
   $("debuffs").innerHTML=tags.join("");
   const moodText=S.money<30?"Tá foda":S.money<80?"Apertando":S.money<150?"Se virando":"Tranquilo";
   $("mood").textContent=moodText+(S.nickname?", "+S.nickname:"");
@@ -254,6 +397,21 @@ function apply(e,c,gain){
   });
 }
 
+
+function processPendingConsequences(){
+  for(let i=pendingConsequences.length-1;i>=0;i--){
+    const pc=pendingConsequences[i];
+    if(S.day>=pc.day){
+      Object.entries(pc.e||{}).forEach(([k,v])=>{
+        if(k==="money")S.money+=v;
+        else S[k]=clamp(S[k]+v);
+      });
+      showSecretToast(pc.msg,false);
+      pendingConsequences.splice(i,1);
+    }
+  }
+}
+
 function nextDay(){
   if(check())return;
   if(S.day>=30){
@@ -263,6 +421,7 @@ function nextDay(){
     return;
   }
   S.day++;
+  processPendingConsequences();
   if(S.tigerCooldown>0)S.tigerCooldown--;
 
   if(activeSpecial&&specialMandatoryLeft>0){
@@ -282,16 +441,30 @@ function nextDay(){
     S.food=clamp(S.food-(S.mode==="hardcore"?4:2));
   }
 
-  if(Math.random()<0.10&&S.tiger===0&&S.tigerCooldown===0&&!activeSpecial&&S.day>=4){
-    render();
-    showTiger();
-    return;
+  if(S.tiger===0&&S.tigerCooldown===0&&!activeSpecial&&S.day>=4){
+    const tigerChance=0.10;
+    const specialChance=0.08;
+    const roll=Math.random();
+    if(roll<tigerChance){
+      render();
+      showTiger();
+      return;
+    }else if(roll<tigerChance+specialChance){
+      render();
+      const available=specialEvents.filter(e=>!S.usedSpecials||!S.usedSpecials.includes(e.id));
+      if(available.length>0){
+        const ev=available[Math.floor(Math.random()*available.length)];
+        if(!S.usedSpecials)S.usedSpecials=[];
+        S.usedSpecials.push(ev.id);
+        showSpecialCard(ev);
+        return;
+      }
+    }
   }
 
-  if(Math.random()<0.08&&S.tiger===0&&S.tigerCooldown===0&&!activeSpecial&&S.day>=6){
+  if(S.tiger===0&&S.tigerCooldown===0&&!activeSpecial&&S.day>=2&&Math.random()<0.15){
     render();
-    showRandomSpecial();
-    return;
+    if(showRandomEvent())return;
   }
 
   render();
@@ -413,12 +586,104 @@ function initSwipe(){
   window.addEventListener("mouseup",_prevMouseUp);
 }
 
+
+
+function showSpecialCard(ev){
+  const el=$("card");
+  el.style.transform="";
+  el.classList.remove("swiping","swipe-right","swipe-left");
+  cardLocked=false;
+
+  activeSpecial=ev;
+  const d=S.difficulty||1;
+  const adjustedCost=Math.round(ev.cost*d*permanentCostMul);
+
+  const effects=Object.entries(ev.e||{}).map(([k,v])=>{
+    const n=k==="money"?"Dinheiro":k==="lazer"?'<i class="fa-solid fa-gamepad"></i> Lazer':k==="food"?'<i class="fa-solid fa-utensils"></i> Alimentação':'<i class="fa-solid fa-chart-line"></i> Investimentos';
+    const valStr=k==="money"?money(v):((v>=0?"+":"")+v);
+    return '<span class="effect neg">'+valStr+" "+n+"</span>";
+  }).join("");
+
+  const consequenceText=ev.consequence?
+    '<div class="panel danger" style="margin-top:8px"><b><i class="fa-solid fa-clock"></i> Consequência em '+ev.consequence.days+' dias</b><p>'+ev.consequence.msg+'</p></div>':'';
+
+  el.innerHTML=
+    '<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> ACEITAR</div>'+
+    '<div class="card-content">'+
+    '<span class="tag">DIA '+S.day+' · EVENTO ESPECIAL</span>'+
+    "<h3>"+ev.emoji+" "+ev.name+"</h3>"+
+    "<p>"+ev.msg+"</p>"+
+    '<div class="cost">Custa '+money(adjustedCost)+'</div>'+
+    '<div class="effects">'+effects+'</div>'+
+    consequenceText+
+    '</div>'+
+    '<p class="small">Carta obrigatória — arraste para a direita.</p>';
+
+  setSwipeCallbacks(function(){
+    S.money-=adjustedCost;
+    Object.entries(ev.e||{}).forEach(([k,v])=>{
+      if(k==="money")S.money+=v;
+      else S[k]=clamp(S[k]+v);
+    });
+    if(ev.consequence){
+      addConsequence(ev.consequence.days,ev.consequence.msg,ev.consequence.e);
+    }
+    showSecretToast(ev.name+": penalidade aplicada!",false);
+    activeSpecial=null;
+    render();
+    if(!check())nextDay();
+  },null);
+}
+
+function showRandomEvent(){
+  const available=randomEvents.filter(e=>S.day>=e.minDay);
+  if(available.length===0)return false;
+  const ev=available[Math.floor(Math.random()*available.length)];
+  const isGood=ev.type==="good";
+
+  Object.entries(ev.e||{}).forEach(([k,v])=>{
+    if(k==="money"){
+      S.money+=v;
+    }else{
+      S[k]=clamp(S[k]+v);
+    }
+  });
+
+  const el=$("card");
+  el.style.transform="";
+  el.classList.remove("swiping","swipe-right","swipe-left");
+  cardLocked=false;
+
+  const effects=Object.entries(ev.e||{}).map(([k,v])=>{
+    const n=k==="money"?"Dinheiro":k==="lazer"?'<i class="fa-solid fa-gamepad"></i> Lazer':k==="food"?'<i class="fa-solid fa-utensils"></i> Alimentação':'<i class="fa-solid fa-chart-line"></i> Investimentos';
+    const valStr=k==="money"?money(v):((v>=0?"+":"")+v);
+    return '<span class="effect '+(v>=0?"pos":"neg")+'">'+valStr+" "+n+"</span>";
+  }).join("");
+
+  el.innerHTML=
+    '<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> OK</div>'+
+    '<div class="card-content">'+
+    '<span class="tag event">DIA '+S.day+' · EVENTO ALEATÓRIO</span>'+
+    "<h3>"+ev.emoji+" "+ev.name+"</h3>"+
+    "<p>"+ev.msg+"</p>"+
+    '<div class="effects">'+effects+'</div>'+
+    '</div>'+
+    '<div class="swipe-hint"><span class="hint-right">Deslize pra continuar <i class="fa-solid fa-arrow-right"></i></span></div>';
+
+  setSwipeCallbacks(function(){
+    render();
+    makeCard();
+  },null);
+
+  return true;
+}
+
 function makeCard(){
   let c;
 
   if(S.day===1&&!S.salaryDone){
     S.salaryDone=true;
-    apply({food:3,inv:3},0);
+    apply({food:2,inv:2},0);
     render();
     setTimeout(()=>{
       render();
@@ -433,7 +698,9 @@ function makeCard(){
     c={t:"Recarga de transporte",d:"Bilhete unitário pro fim de semana. Sem isso não vai pra lugar nenhum.",c:25,e:{food:-2,lazer:-3,inv:-3},fixed:true};
   }else{
     let available=cards.filter((_,i)=>!usedCards.includes(i));
-    if(available.length===0){usedCards=[];available=cards.slice()}
+    if(available.length===0){usedCards=[];
+  S.usedSpecials=[];
+  pendingConsequences=[];available=cards.slice()}
     const idx=cards.indexOf(available[Math.floor(Math.random()*available.length)]);
     usedCards.push(idx);
     c=cards[idx];
@@ -475,7 +742,7 @@ function renderCard(c){
     (canAccept?'<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> ACEITAR</div>':'')+
     (canDeny?'<div class="swipe-overlay deny"><i class="fa-solid fa-xmark"></i> NEGAR</div>':'')+
     '<div class="card-content">'+
-    '<span class="tag">DIA '+S.day+(c.fixed?" · EVENTO FIXO":c.forced?" · TIGRINHO":" · DECISÃO")+'</span>'+
+    '<span class="tag">DIA '+S.day+(c.fixed?" · EVENTO FIXO":c.forced&&S.tiger>0?" · TIGRINHO":c.forced?" · OBRIGATÓRIO":" · DECISÃO")+'</span>'+
     (S.mode?'<span class="diff-badge '+S.mode+'">'+(S.mode==="hardcore"?"HARDCORE":"DIFÍCIL")+'</span>':"")+
     "<h3>"+c.t+"</h3><p>"+c.d+"</p>"+
     '<div class="cost">'+(adjustedGain>0?"Você ganha "+money(adjustedGain):baseCost===0&&c.c===0?"Grátis":"Custa "+money(adjustedCost))+"</div>"+
@@ -628,6 +895,8 @@ function showIntro(){
 
 function startGame(){
   usedCards=[];
+  S.usedSpecials=[];
+  pendingConsequences=[];
   consecutiveDenies=0;
   swipeDragging=false;
   swipeProcessing=false;
