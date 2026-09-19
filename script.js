@@ -612,8 +612,8 @@ function showIntro(){
     '<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> COMECAR</div>'+
     '<div class="card-content">'+
     '<span class="tag">DIA 1 · INICIO</span>'+
-    '<h3><i class="fa-solid fa-briefcase"></i> Primeiro dia no SENAC</h3>'+
-    '<p>Voce acabou de comecar como jovem aprendiz. Tem <b>'+money(S.money)+'</b> no bolso e precisa sobreviver 30 dias equilibrando lazer, alimentacao e investimentos.</p>'+
+    '<h3><i class="fa-solid fa-briefcase"></i> Primeiro dia como jovem aprendiz</h3>'+
+    '<p>Voce acabou de comecar no SENAC. Tem <b>'+money(S.money)+'</b> no bolso e precisa sobreviver 30 dias equilibrando lazer, alimentacao e investimentos.</p>'+
     '<div class="panel"><b><i class="fa-solid fa-circle-info"></i> Regras</b>'+
     '<p>Deslize o card pra <b>direita</b> pra aceitar ou <b>esquerda</b> pra negar.<br>'+
     'Seus 3 status nao podem cair a zero. Cuidado com cada decisao!</p></div>'+
