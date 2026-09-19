@@ -20,32 +20,32 @@ let introDone=false;
 
 const specialEvents=[
   {id:"golpe_pix",name:"Golpe do Pix",emoji:'<i class="fa-solid fa-credit-card"></i>',mandatory:2,
-   msg:"Caiu um pix fantasma na sua conta. Agora tu ta devendo R$ 80 e as proximas 2 cartas sao obrigatorias.",
-   desc:"Alguem transferiu um pix errado pra tua conta e agora quer o dinheiro de volta — com juros.",cost:80,penalty:{lazer:-20,food:-20,inv:-20},gainMul:0.7,costMul:1.4},
-  {id:"emprestimo_fantasma",name:"Emprestimo Fantasma",emoji:'<i class="fa-solid fa-mobile-screen"></i>',mandatory:2,
-   msg:"Um app pegou seus dados e fez um emprestimo no seu nome. Tu nao pediu mas vai pagar.",
-   desc:"Notificacao: \"Emprestimo aprovado! R$ 100 na conta.\" Mas o app ja comecou a cobrar.",cost:100,penalty:{lazer:-25,food:-25,inv:-25},gainMul:0.75,costMul:1.35},
-  {id:"promocao_fake",name:"Promocao Golpista",emoji:'<i class="fa-solid fa-tag"></i>',mandatory:1,
-   msg:"50% OFF em tudo! Clicou e o app descontou R$ 50 de uma assinatura que tu nao assinou.",
-   desc:"Oferta relampago que parecia boa demais. Era. Cobre assinatura fantasma.",cost:50,penalty:{lazer:-15,food:-15,inv:-15},gainMul:0.8,costMul:1.25},
-  {id:"divida_familiar",name:"Pediu pra Mae",emoji:'<i class="fa-solid fa-user"></i>',mandatory:1,
-   msg:"Sua mae emprestou R$ 40 mas disse que vai cobrar todo dia ate voltar. E ainda te xingou.",
-   desc:"Divida familiar. Nao tem app que resolva. Paga ou perde o almoco de domingo.",cost:40,penalty:{lazer:-15,food:-15,inv:-15},gainMul:0.85,costMul:1.2},
-  {id:"clonagem_cartao",name:"Clonaram teu Cartao",emoji:'<i class="fa-solid fa-credit-card"></i>',mandatory:2,
-   msg:"Compra suspeita de R$ 150. Seu cartao foi clonado!",
-   desc:"Notificacao do banco: \"Compra aprovada em Florianopolis.\" Tu ta no Senac.",cost:150,penalty:{lazer:-25,food:-20,inv:-20},gainMul:0.65,costMul:1.45},
+   msg:"Caiu um pix fantasma na sua conta. Agora tu tá devendo R$ 80 e as próximas 2 cartas são obrigatórias.",
+   desc:"Alguém transferiu um pix errado pra tua conta e agora quer o dinheiro de volta — com juros.",cost:80,penalty:{lazer:-20,food:-20,inv:-20},gainMul:0.7,costMul:1.4},
+  {id:"emprestimo_fantasma",name:"Empréstimo Fantasma",emoji:'<i class="fa-solid fa-mobile-screen"></i>',mandatory:2,
+   msg:"Um app pegou seus dados e fez um empréstimo no seu nome. Tu não pediu mas vai pagar.",
+   desc:"Notificação: \"Empréstimo aprovado! R$ 100 na conta.\" Mas o app já começou a cobrar.",cost:100,penalty:{lazer:-25,food:-25,inv:-25},gainMul:0.75,costMul:1.35},
+  {id:"promocao_fake",name:"Promoção Golpista",emoji:'<i class="fa-solid fa-tag"></i>',mandatory:1,
+   msg:"50% OFF em tudo! Clicou e o app descontou R$ 50 de uma assinatura que tu não assinou.",
+   desc:"Oferta relâmpago que parecia boa demais. Era. Cobra assinatura fantasma.",cost:50,penalty:{lazer:-15,food:-15,inv:-15},gainMul:0.8,costMul:1.25},
+  {id:"divida_familiar",name:"Pediu pra Mãe",emoji:'<i class="fa-solid fa-user"></i>',mandatory:1,
+   msg:"Sua mãe emprestou R$ 40 mas disse que vai cobrar todo dia até voltar. E ainda te xingou.",
+   desc:"Dívida familiar. Não tem app que resolva. Paga ou perde o almoço de domingo.",cost:40,penalty:{lazer:-15,food:-15,inv:-15},gainMul:0.85,costMul:1.2},
+  {id:"clonagem_cartao",name:"Clonaram teu Cartão",emoji:'<i class="fa-solid fa-credit-card"></i>',mandatory:2,
+   msg:"Compra suspeita de R$ 150. Seu cartão foi clonado!",
+   desc:"Notificação do banco: \"Compra aprovada em Florianópolis.\" Tu tá no Senac.",cost:150,penalty:{lazer:-25,food:-20,inv:-20},gainMul:0.65,costMul:1.45},
   {id:"celular_roubado",name:"Celular Roubado",emoji:'<i class="fa-solid fa-mobile-screen"></i>',mandatory:2,
-   msg:"Te arrancaram o celular na saida do Senac. Sem volta.",
-   desc:"Tu tava tranquilo e do nada um cara pegou teu celular e saiu correndo. Policia nao vai fazer nada.",cost:120,penalty:{lazer:-25,food:-15,inv:-20},gainMul:0.7,costMul:1.4},
+   msg:"Te arrancaram o celular na saída do Senac. Sem volta.",
+   desc:"Tu tava tranquilo e do nada um cara pegou teu celular e saiu correndo. Polícia não vai fazer nada.",cost:120,penalty:{lazer:-25,food:-15,inv:-20},gainMul:0.7,costMul:1.4},
   {id:"material_escolar",name:"Material Escolar Emergencial",emoji:'<i class="fa-solid fa-book"></i>',mandatory:1,
-   msg:"Caderno acabou, caneta estourou e o livro didatico precisa ser trocado.",
-   desc:"Mes de provas e o material nao aguenta mais. Comprar tudo de uma vez pesa no bolso.",cost:60,penalty:{lazer:-10,food:-15,inv:-10},gainMul:0.85,costMul:1.3},
-  {id:"aniversario_amigo",name:"Aniversario do Amigo",emoji:'<i class="fa-solid fa-cake-candles"></i>',mandatory:1,
-   msg:"Teu melhor amigo ta fazendo aniversario. Presente, transporte e contribuicao pra festa.",
-   desc:"Amizade e carissima. Mas tu nao pode faltar no aniversario do parça.",cost:55,penalty:{lazer:-15,food:-10,inv:-10},gainMul:0.85,costMul:1.25},
-  {id:"vale_refeicao_estourado",name:"Vale Refeicao Estourado",emoji:'<i class="fa-solid fa-utensils"></i>',mandatory:1,
-   msg:"Gastou todo o vale refeicao na segunda. Restante do mes sem comida decente.",
-   desc:"Marmita de R$ 10 todo dia saindo do bolso. OVR nao cobre mais nada.",cost:50,penalty:{lazer:-10,food:-25,inv:-10},gainMul:0.85,costMul:1.25}
+   msg:"Caderno acabou, caneta estourou e o livro didático precisa ser trocado.",
+   desc:"Mês de provas e o material não aguenta mais. Comprar tudo de uma vez pesa no bolso.",cost:60,penalty:{lazer:-10,food:-15,inv:-10},gainMul:0.85,costMul:1.3},
+  {id:"aniversario_amigo",name:"Aniversário do Amigo",emoji:'<i class="fa-solid fa-cake-candles"></i>',mandatory:1,
+   msg:"Teu melhor amigo tá fazendo aniversário. Presente, transporte e contribuição pra festa.",
+   desc:"Amizade é caríssima. Mas tu não pode faltar no aniversário do parça.",cost:55,penalty:{lazer:-15,food:-10,inv:-10},gainMul:0.85,costMul:1.25},
+  {id:"vale_refeicao_estourado",name:"Vale Refeição Estourado",emoji:'<i class="fa-solid fa-utensils"></i>',mandatory:1,
+   msg:"Gastou todo o vale refeição na segunda. Restante do mês sem comida decente.",
+   desc:"Marmita de R$ 10 todo dia saindo do bolso. OVR não cobre mais nada.",cost:50,penalty:{lazer:-10,food:-25,inv:-10},gainMul:0.85,costMul:1.25}
 ];
 let activeSpecial=null;
 let specialMandatoryLeft=0;
@@ -100,13 +100,13 @@ const cards=[
 
 /* === TRABALHO / RENDA === */
 {t:"Hora extra no trampo",d:"Descansa menos, ganha mais. Troca tempo por grana.",c:0,e:{inv:10,lazer:-14,food:-7},gain:35,
-  secret:SC(.30,S_("O chefe notou e te deu bonus.",{inv:3},25),S_("Exaustao total. Errou tudo no trabalho.",{lazer:-5,inv:-6}))},
-{t:"Freela rapido",d:"Servico pontual. Rende bem mas tira teu tempo livre.",c:0,e:{lazer:-8,inv:6,food:-2},gain:50,
-  secret:SC(.20,S_("Cliente curtiu. Ja te chamou pra proxima.",{inv:5},50),null)},
-{t:"Bolo de pote",d:"Tu e a galera fizeram bolo de pote pra vender no Senac. Rendeu bem.",c:0,e:{inv:4,lazer:3,food:1},gain:30,
-  secret:SC(.25,S_("Vendeu tudo em 1 hora. Virou empreendedor.",{inv:3,lazer:2}),S_("Nao vendeu nada. Sobrou bolo na sua casa.",{inv:-3,lazer:-2}))},
-{t:"Mesada extra da vo",d:"Vó teve pena e soltou um dinheirinho extra. Amor de avó nao tem preco.",c:0,e:{inv:8,lazer:8,food:8},gain:60,
-  secret:SC(.25,S_("Vo disse que tu e o neto favorito. Ganhou mais um pouco.",{inv:5,lazer:5},20),S_("Vo cobrou de volta no dia seguinte. Amor tem preco sim.",{inv:-5,lazer:-5}))},
+  secret:SC(.30,S_("O chefe notou e te deu bônus.",{inv:3},25),S_("Exaustão total. Errou tudo no trabalho.",{lazer:-5,inv:-6}))},
+{t:"Freela rápido",d:"Serviço pontual. Rende bem mas tira teu tempo livre.",c:0,e:{lazer:-8,inv:6,food:-2},gain:50,
+  secret:SC(.20,S_("Cliente curtiu. Já te chamou pra próxima.",{inv:5},50),null)},
+{t:"Bolo de pote",d:"Tu é a galera fizeram bolo de pote pra vender no Senac. Rendeu bem.",c:0,e:{inv:4,lazer:3,food:1},gain:30,
+  secret:SC(.25,S_("Vendeu tudo em 1 hora. Virou empreendedor.",{inv:3,lazer:2}),S_("Não vendeu nada. Sobrou bolo na sua casa.",{inv:-3,lazer:-2}))},
+{t:"Mesada extra da vó",d:"Vó teve pena e soltou um dinheirinho extra. Amor de avó não tem preço.",c:0,e:{inv:8,lazer:8,food:8},gain:60,
+  secret:SC(.25,S_("Vó disse que tu é o neto favorito. Ganhou mais um pouco.",{inv:5,lazer:5},20),S_("Vó cobrou de volta no dia seguinte. Amor tem preço sim.",{inv:-5,lazer:-5}))},
 
 /* === GASTOS FIXOS === */
 {t:"Conta de luz",d:"Conta veio salgada. Banho longo custa caro.",c:35,e:{food:-4,lazer:-3,inv:-4},
@@ -119,7 +119,7 @@ const cards=[
   secret:SC(.45,S_("Deu certo. Tu saiu antes de perder.",{inv:5,lazer:5}),S_("Perdeu tudo e quis jogar mais. Vício é foda.",{inv:-15,lazer:-12,food:-8}))},
 {t:"Empréstimo rápido",d:"App oferece crédito fácil. Dinheiro hoje, dívida amanhã.",c:0,e:{inv:-8,lazer:8,food:4},gain:60,
   secret:SC(.30,S_("Pagou tudo no mês. Sem juros, sem estresse.",{inv:8,lazer:3}),S_("Não pagou. Juros compostos devoraram teu salário.",{inv:-12,lazer:-8,food:-6}))},
-{t:"Parcelar na feira",d:"O vendedor deixou parcelar. Pega agora, paga depois. Cilada ou estrategia?",c:20,e:{lazer:12,inv:-6,food:-2},
+{t:"Parcelar na feira",d:"O vendedor deixou parcelar. Pega agora, paga depois. Cilada ou estratégia?",c:20,e:{lazer:12,inv:-6,food:-2},
   secret:SC(.30,S_("Pagou tudo no prazo. Boa.",{inv:5}),S_("Perdeu o controle. Fatura explodiu.",{inv:-10,lazer:-5,food:-4}))},
 {t:"Presente pra mãe",d:"Mãe merece. Amor não tem preço mas tem custo.",c:25,e:{lazer:8,food:-3,inv:-5},
   secret:SC(.20,S_("Mãe chorou de emoção. Não tem dinheiro que pague isso.",{lazer:10,food:5}),null)},
@@ -133,8 +133,8 @@ const cards=[
   secret:SC(.15,S_("O rolê rendeu uma ideia de negócio. Inspiração.",{inv:8}),null)},
 {t:"Abono Salarial",d:"Governo liberou. Dinheiro extra sem fazer nada.",c:0,e:{inv:4,lazer:5,food:5},gain:50,
   secret:SC(.15,S_("Abono caiu na conta. Dinheiro grátis!",{inv:3},30),S_("Gastou tudo em compra online. Arrependimento.",{lazer:-5,inv:-8}))},
-{t:"Fim de semana produtivo",d:"Estudou, cozinhorganizou as contas. Dedicação.",c:0,e:{inv:12,lazer:-4,food:6},
-  secret:SC(.15,S_("Teu planejamento rendeu bonus surpresa no trampo.",{inv:3,food:2},25),null)},
+{t:"Fim de semana produtivo",d:"Estudou, cozinhou e organizou as contas. Dedicação.",c:0,e:{inv:12,lazer:-4,food:6},
+  secret:SC(.15,S_("Teu planejamento rendeu bônus surpresa no trampo.",{inv:3,food:2},25),null)},
 {t:"Namoradinha",d:"Saíste com alguém especial. Amor custa mas a alma agradece.",c:30,e:{lazer:20,food:2,inv:-9},
   secret:SC(.20,S_("A pessoa te presenteou de volta. Relação recíproca.",{lazer:5,inv:3},20),S_("Não deu certo. Dinheiro e emoção no lixo.",{lazer:-8,food:-3}))}
 ];
@@ -151,8 +151,8 @@ function render(){
     $(id+"B").style.width=v+"%";
   });
   const tags=[];
-  if(S.debt)tags.push('<span class="effect neg"><i class="fa-solid fa-money-bill-wave"></i> Divida ativa</span>');
-  if(S.tiger>0)tags.push('<span class="effect neg">'+tigrinho+' '+S.tiger+' cartas obrigatorias</span>');
+  if(S.debt)tags.push('<span class="effect neg"><i class="fa-solid fa-money-bill-wave"></i> Dívida ativa</span>');
+  if(S.tiger>0)tags.push('<span class="effect neg">'+tigrinho+' '+S.tiger+' cartas obrigatórias</span>');
   if(consecutiveDenies>=2)tags.push('<span class="effect neg"><i class="fa-solid fa-rotate"></i> '+consecutiveDenies+' negativas seguidas</span>');
   if(permanentGainMul<1)tags.push('<span class="effect neg"><i class="fa-solid fa-arrow-trend-down"></i> Ganhos -'+Math.round((1-permanentGainMul)*100)+'%</span>');
   if(permanentCostMul>1)tags.push('<span class="effect neg"><i class="fa-solid fa-arrow-trend-up"></i> Gastos +'+Math.round((permanentCostMul-1)*100)+'%</span>');
@@ -209,18 +209,18 @@ function finish(reason){
     '<span class="tag">'+(win?"MÊS CONCLUÍDO":"FIM DE JOGO")+'</span>'+
     '<h2>'+(win?"Passou direto, "+player+"!": "Game over")+"</h2>"+
     "<p>"+S.name+" ("+S.turma+") terminou com <b>"+money(S.money)+"</b>.</p>"+
-    (S.mode?'<p><span class="diff-badge '+S.mode+'">'+(S.mode==="hardcore"?'<i class="fa-solid fa-fire"></i> HARDCORE':'<i class="fa-solid fa-bolt"></i> DIFICIL')+'</span></p>':"")+
+    (S.mode?'<p><span class="diff-badge '+S.mode+'">'+(S.mode==="hardcore"?'<i class="fa-solid fa-fire"></i> HARDCORE':'<i class="fa-solid fa-bolt"></i> DIFÍCIL')+'</span></p>':"")+
     '<div class="stats-summary">'+
       '<div class="stat-item"><span class="stat-val"><i class="fa-solid fa-gamepad"></i> '+Math.round(S.lazer)+'</span><span class="stat-label">Lazer</span></div>'+
-      '<div class="stat-item"><span class="stat-val"><i class="fa-solid fa-utensils"></i> '+Math.round(S.food)+'</span><span class="stat-label">Alimentacao</span></div>'+
+      '<div class="stat-item"><span class="stat-val"><i class="fa-solid fa-utensils"></i> '+Math.round(S.food)+'</span><span class="stat-label">Alimentação</span></div>'+
       '<div class="stat-item"><span class="stat-val"><i class="fa-solid fa-chart-line"></i> '+Math.round(S.inv)+'</span><span class="stat-label">Investimentos</span></div>'+
     '</div>'+
     "<p>"+(win?"Deu tudo certo. Equilibrou tudo durante 30 dias. Manda bem!":reason)+"</p>"+
-    (!win&&S.mode==="hardcore"?'<p style="margin-top:12px;font-size:14px;color:#facc15;font-weight:700"><i class="fa-solid fa-fire"></i> Se voce perdeu no Hardcore, voce so tem SABOR aura <i class="fa-solid fa-fire"></i></p>':"")+
+    (!win&&S.mode==="hardcore"?'<p style="margin-top:12px;font-size:14px;color:#facc15;font-weight:700"><i class="fa-solid fa-fire"></i> Se você perdeu no Hardcore, você só tem SABOR aura <i class="fa-solid fa-fire"></i></p>':"")+
     (win?'<p style="margin-top:12px;font-size:13px;color:var(--ink-sec)"><i class="fa-solid fa-download"></i> Seus dados foram baixados em JSON.</p>':'')+
     '<div class="linkedin-cta">'+
     '<span class="cta-icon"><i class="fa-solid fa-handshake"></i></span>'+
-    '<p class="cta-title">E ai, curtiu?</p>'+
+    '<p class="cta-title">E aí, curtiu?</p>'+
     '<p class="cta-text">Me segue no LinkedIn e conta o que achou! Sua opinião me ajuda demais.</p>'+
     '<a href="https://www.linkedin.com/in/igor-de-souza-branco-b68630314/" target="_blank" rel="noopener" class="cta-btn"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>'+
     '</div>';
@@ -309,8 +309,8 @@ function showTiger(){
     '<div class="card-content">'+
     '<span class="tag">EVENTO ESPECIAL</span>'+
     '<h3><img src="tigrinho.jpg" alt="Tigrinho" class="tigrinho-img big"> A carta do Tigrinho</h3>'+
-    '<p>Caiu uma notificacao no celular. "Ganhe dinheiro facil!" Sera?</p>'+
-    '<div class="panel danger"><b><i class="fa-solid fa-triangle-exclamation"></i> Vasculha o bolso</b><p>Se aceitar, as proximas <b>3 cartas sao obrigatorias</b> — sem recusa. Da pra se recuperar depois, mas vai ser puxado.</p></div>'+
+    '<p>Caiu uma notificação no celular. "Ganhe dinheiro fácil!" Será?</p>'+
+    '<div class="panel danger"><b><i class="fa-solid fa-triangle-exclamation"></i> Vasculha o bolso</b><p>Se aceitar, as próximas <b>3 cartas são obrigatórias</b> — sem recusa. Dá pra se recuperar depois, mas vai ser puxado.</p></div>'+
     '</div>'+
     '<div class="swipe-hint"><span class="hint-left"><i class="fa-solid fa-arrow-left"></i> Negar</span><span class="hint-right">Aceitar <i class="fa-solid fa-arrow-right"></i></span></div>';
 
@@ -426,11 +426,11 @@ function makeCard(){
     },800);
     return;
   }else if(S.day===7){
-    c={t:"Conta de luz",d:"A conta chegou. Nao pagar cria uma divida.",c:50,e:{food:-3,lazer:-4,inv:-4},fixed:true};
+    c={t:"Conta de luz",d:"A conta chegou. Não pagar cria uma dívida.",c:50,e:{food:-3,lazer:-4,inv:-4},fixed:true};
   }else if(S.day===15){
-    c={t:"Ajuda em casa",d:"Contribuicao mensal pra ajudar em casa. Nao pagar cria conversa.",c:120,e:{food:-5,lazer:-7,inv:-7},fixed:true};
+    c={t:"Ajuda em casa",d:"Contribuição mensal pra ajudar em casa. Não pagar cria conversa.",c:120,e:{food:-5,lazer:-7,inv:-7},fixed:true};
   }else if(S.day===22){
-    c={t:"Recarga de transporte",d:"Bilhete unitario pro fim de semana. Sem isso nao vai pra lugar nenhum.",c:25,e:{food:-2,lazer:-3,inv:-3},fixed:true};
+    c={t:"Recarga de transporte",d:"Bilhete unitário pro fim de semana. Sem isso não vai pra lugar nenhum.",c:25,e:{food:-2,lazer:-3,inv:-3},fixed:true};
   }else{
     let available=cards.filter((_,i)=>!usedCards.includes(i));
     if(available.length===0){usedCards=[];available=cards.slice()}
@@ -441,7 +441,7 @@ function makeCard(){
 
   if(S.tiger>0){
     const tigerCost=Math.round(Math.min(30,S.money)*(S.difficulty||1));
-    c={t:tigrinho+" Oferta obrigatoria",d:"Voce esta na sequencia do Tigrinho. Esta carta nao pode ser negada.",c:tigerCost,e:{lazer:5,inv:-4,food:-3},forced:true};
+    c={t:tigrinho+" Oferta obrigatória",d:"Você está na sequência do Tigrinho. Esta carta não pode ser negada.",c:tigerCost,e:{lazer:5,inv:-4,food:-3},forced:true};
   }
 
   renderCard(c);
@@ -465,7 +465,7 @@ function renderCard(c){
   const canDeny=!c.fixed&&!c.forced;
 
   const effects=Object.entries(c.e||{}).map(([k,v])=>{
-    const n=k==="lazer"?'<i class="fa-solid fa-gamepad"></i> Lazer':k==="food"?'<i class="fa-solid fa-utensils"></i> Alimentacao':'<i class="fa-solid fa-chart-line"></i> Investimentos';
+    const n=k==="lazer"?'<i class="fa-solid fa-gamepad"></i> Lazer':k==="food"?'<i class="fa-solid fa-utensils"></i> Alimentação':'<i class="fa-solid fa-chart-line"></i> Investimentos';
     let dv=v;
     if(isHC)dv=v>0?Math.round(v*0.6):v<0?Math.round(v*1.4):v;
     return '<span class="effect '+(dv>=0?"pos":"neg")+'">'+(dv>=0?"+":"")+dv+" "+n+"</span>";
@@ -589,15 +589,15 @@ function showAurudoOverlay(name,mode,callback){
   ol.innerHTML=
     '<div class="aurudo-card'+(isHardcore?" hardcore":"")+'">'+
     '<span class="aurudo-emoji">'+(isHardcore?'<i class="fa-solid fa-skull"></i>':'<i class="fa-solid fa-fire"></i>')+'</span>'+
-    '<h2>'+(isHardcore?"VOCÊ E O MAIS AURUDO DO SENAC!":name+", tu e AURUDO!")+'</h2>'+
+    '<h2>'+(isHardcore?"VOCÊ É O MAIS AURUDO DO SENAC!":name+", tu é AURUDO!")+'</h2>'+
     '<p>'+(isHardcore
-      ?"O nome tem 6767. Isso e lendario. Modo <b>Hardcore</b> desbloqueado."
-      :"O nome tem 67. Isso e rareza. Modo <b>Dificil</b> ativado.")+'</p>'+
-    '<div class="aurudo-mode">'+(isHardcore?'<i class="fa-solid fa-fire"></i> MODO HARDCORE <i class="fa-solid fa-fire"></i>':'<i class="fa-solid fa-bolt"></i> MODO DIFICIL <i class="fa-solid fa-bolt"></i>')+'</div>'+
+      ?"O nome tem 6767. Isso é lendário. Modo <b>Hardcore</b> desbloqueado."
+      :"O nome tem 67. Isso é rareza. Modo <b>Difícil</b> ativado.")+'</p>'+
+    '<div class="aurudo-mode">'+(isHardcore?'<i class="fa-solid fa-fire"></i> MODO HARDCORE <i class="fa-solid fa-fire"></i>':'<i class="fa-solid fa-bolt"></i> MODO DIFÍCIL <i class="fa-solid fa-bolt"></i>')+'</div>'+
     '<p style="margin-top:14px;font-size:12px;color:var(--ink-sec)">'+(isHardcore
-      ?"Custos x3, ganhos cortados, stats comecam em 20. Boa sorte."
-      :"Custos x1.5, ganhos levemente reduzidos. Da pra virar.")+'</p>'+
-    '<button class="btn primary full" style="margin-top:18px" id="aurudoContinue">Bora la</button>'+
+      ?"Custos x3, ganhos cortados, stats começam em 20. Boa sorte."
+      :"Custos x1.5, ganhos levemente reduzidos. Dá pra virar.")+'</p>'+
+    '<button class="btn primary full" style="margin-top:18px" id="aurudoContinue">Bora lá</button>'+
     '</div>';
   document.body.appendChild(ol);
   ol.querySelector("#aurudoContinue").onclick=()=>{ol.remove();callback()};
@@ -609,16 +609,16 @@ function showIntro(){
   el.classList.remove("swiping","swipe-right","swipe-left");
   cardLocked=false;
   el.innerHTML=
-    '<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> COMECAR</div>'+
+    '<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> COMEÇAR</div>'+
     '<div class="card-content">'+
-    '<span class="tag">DIA 1 · INICIO</span>'+
+    '<span class="tag">DIA 1 · INÍCIO</span>'+
     '<h3><i class="fa-solid fa-briefcase"></i> Primeiro dia como jovem aprendiz</h3>'+
-    '<p>Voce acabou de comecar no SENAC. Tem <b>'+money(S.money)+'</b> no bolso e precisa sobreviver 30 dias equilibrando lazer, alimentacao e investimentos.</p>'+
+    '<p>Você acabou de começar no SENAC. Tem <b>'+money(S.money)+'</b> no bolso e precisa sobreviver 30 dias equilibrando lazer, alimentação e investimentos.</p>'+
     '<div class="panel"><b><i class="fa-solid fa-circle-info"></i> Regras</b>'+
     '<p>Deslize o card pra <b>direita</b> pra aceitar ou <b>esquerda</b> pra negar.<br>'+
-    'Seus 3 status nao podem cair a zero. Cuidado com cada decisao!</p></div>'+
+    'Seus 3 status não podem cair a zero. Cuidado com cada decisão!</p></div>'+
     '</div>'+
-    '<div class="swipe-hint"><span class="hint-right">Deslize pra comecar <i class="fa-solid fa-arrow-right"></i></span></div>';
+    '<div class="swipe-hint"><span class="hint-right">Deslize pra começar <i class="fa-solid fa-arrow-right"></i></span></div>';
 
   setSwipeCallbacks(function(){
     introDone=true;
@@ -651,13 +651,13 @@ $("registerBtn").onclick=()=>{
   const theme=$("themeSelect").value;
   const err=$("regError");
 
-  if(!name){err.textContent="Preenche o nome ai.";return}
+  if(!name){err.textContent="Preenche o nome aí.";return}
   if(!turma){err.textContent="Qual tua turma do SENAC?";return}
-  if(!email||!email.includes("@")){err.textContent="Email invalido, confere ai.";return}
-  if(nameHasNumbersExcept67(name)){err.textContent="Nome nao pode ter numero! So letras.";return}
+  if(!email||!email.includes("@")){err.textContent="E-mail inválido, confere aí.";return}
+  if(nameHasNumbersExcept67(name)){err.textContent="Nome não pode ter número! Só letras.";return}
 
   if(emailAlreadyPlayed(email)){
-    err.textContent="Esse email ja jogou. Cada um so uma vez, mano.";
+    err.textContent="Esse e-mail já jogou. Cada um só uma vez, mano.";
     return;
   }
 
