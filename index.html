@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fugindo das Dívidas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main>
+<section id="start" class="screen active">
+  <div class="hero">
+    <span class="tag">Simulação de sobrevivência financeira</span>
+    <h1>Fugindo<br>das Dívidas</h1>
+    <p>Você é um jovem aprendiz com <b>R$ 800</b>. Tome decisões durante <b>30 dias</b> e tente equilibrar lazer, alimentação e investimentos.</p>
+  </div>
+  <div class="panel">
+    <div class="rules-mini">
+      <b>Como jogar:</b> Deslize o card para a direita <b>(aceitar)</b> ou esquerda <b>(negar)</b>.<br>
+      Mantenha seus 3 status acima de 50 para sobreviver!
+    </div>
+    <p class="small">Todos começam com os mesmos recursos. Suas escolhas definem o mês.</p>
+    <button class="btn primary full" id="startBtn">Começar o mês →</button>
+  </div>
+</section>
+
+<section id="register" class="screen">
+  <div class="hero">
+    <span class="tag">Cadastro</span>
+    <h1>Fugindo<br>das Dívidas</h1>
+    <p>Preencha seus dados para começar a jogar.</p>
+  </div>
+  <div class="panel">
+    <h2>Seus dados</h2>
+    <div class="avatar" id="avatar">🧑</div>
+    <div class="grid">
+      <div class="field"><label>Nome</label><input id="name" maxlength="30" placeholder="Seu nome completo"></div>
+      <div class="field"><label>Turma SENAC</label><input id="turma" maxlength="20" placeholder="Ex: ADS 2025"></div>
+    </div>
+    <div class="field" style="margin-top:10px"><label>Email</label><input id="email" type="email" placeholder="seu@email.com"></div>
+    <div class="grid" style="margin-top:10px">
+      <div class="field"><label>Apelido</label><input id="nickname" maxlength="12" placeholder="Opcional"></div>
+      <div class="field"><label>Visual</label><select id="look">
+        <option>🧑</option><option>👩</option><option>👨</option><option>🧑🏽</option><option>🧒</option><option>👴</option><option>🤒</option><option>🥶</option>
+      </select></div>
+    </div>
+    <div class="grid" style="margin-top:10px">
+      <div class="field"><label>Cor favorita</label><select id="favColor">
+        <option value="#6366f1">Roxo</option><option value="#f97316">Laranja</option><option value="#22c55e">Verde</option>
+        <option value="#ec4899">Rosa</option><option value="#06b6d4">Azul</option><option value="#eab308">Amarelo</option>
+      </select></div>
+      <div class="field"><label>Tema</label><select id="themeSelect">
+        <option value="dark">Escuro</option><option value="light">Claro</option>
+      </select></div>
+    </div>
+    <div id="regError" class="reg-error"></div>
+    <button class="btn primary full" id="registerBtn" style="margin-top:14px">Jogar →</button>
+  </div>
+</section>
+
+<section id="game" class="screen">
+  <div class="top">
+    <div><div class="day" id="day">DIA 1/30</div><div class="money" id="money">R$ 800</div></div>
+    <span class="tag" id="mood">Sobrevivendo</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>🎮 LAZER</b><div class="num" id="lazerN">60</div><div class="bar"><div class="fill" id="lazerB"></div></div></div>
+    <div class="stat"><b>🍛 ALIMENTAÇÃO</b><div class="num" id="foodN">60</div><div class="bar"><div class="fill" id="foodB"></div></div></div>
+    <div class="stat"><b>📈 INVESTIMENTOS</b><div class="num" id="invN">40</div><div class="bar"><div class="fill" id="invB"></div></div></div>
+  </div>
+
+  <div id="debuffs" class="effects"></div>
+  <div class="panel" id="card"></div>
+</section>
+
+<section id="end" class="screen">
+  <div class="panel center" id="endPanel"></div>
+  <button class="btn primary full" id="restart">Jogar novamente</button>
+</section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
