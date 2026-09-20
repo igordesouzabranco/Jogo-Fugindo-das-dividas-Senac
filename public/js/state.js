@@ -1,0 +1,14 @@
+let S = {};
+let currentCard = null;
+let cardLocked = false;
+let onSwipeAccept = null;
+let onSwipeDeny = null;
+let swipeSx = 0, swipeDx = 0, swipeDragging = false;
+let swipeProcessing = false;
+const swipeThreshold = 100;
+let consecutiveDenies = 0;
+let permanentGainMul = 1;
+let permanentCostMul = 1;
+let introDone = false;
+let pendingConsequences = [];
+const tigrinho = '<img src="/img/tigrinho.jpg" alt="Tigrinho" class="tigrinho-img">';

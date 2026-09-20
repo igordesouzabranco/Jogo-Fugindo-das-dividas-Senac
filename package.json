@@ -1,0 +1,1 @@
+{"name":"fugindo-das-dividas","version":"1.0.0","description":"Jogo educativo de simulação financeira SENAC","main":"server.js","scripts":{"start":"node server.js","test":"node test/test.js"},"dependencies":{"dotenv":"^16.3.1","express":"^4.18.2","pg":"^8.11.3","pg-hstore":"^2.3.4","sequelize":"^6.35.0"}}

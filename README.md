@@ -55,30 +55,82 @@ Aparecem como overlays rapidos (nao consomem dia). Pode ser bons ou ruins.
 - HTML5 + CSS3 + JavaScript (Vanilla JS)
 - Font Awesome 6.5.1
 - Google Fonts (Inter)
-- Arquivo estatico (sem dependencias)
+- Node.js + Express (backend)
+- Sequelize + PostgreSQL (banco de dados)
 
 ## Como Rodar
 
+### Frontend apenas (sem backend)
 ```bash
-# Abrir direto no navegador
 start index.html
-
 # Ou servidor local
 npx serve .
-python -m http.server 8000
+```
+
+### Com backend completo
+```bash
+npm install
+npm start        # Servidor em http://localhost:3000
+npm test         # Testa API (vitória + derrota → /api/resultados)
 ```
 
 ## Estrutura
 
 ```
 jogosenac/
-├── index.html      # HTML (4 telas)
-├── script.js       # Logica do jogo (~965 linhas)
-├── styles.css      # Estilizacao dark mode
-├── tigrinho.jpg    # Imagem do Tigrinho
-├── AGENTS.md       # Documentacao tecnica
-└── README.md       # Este arquivo
-```
+├── index.html        # HTML (4 telas)
+├── styles.css        # Estilização dark mode
+├── server.js         # Backend Express + API
+├── package.json      # Dependências
+├── .env.example      # Variáveis de ambiente
+├── img/              # Imagens do jogo
+├── js/
+│   ├── utils.js              # Helpers puros
+│   ├── state.js              # Estado global do jogo
+│   ├── data/
+│   │   ├── eventosEspeciais.js   # 9 eventos especiais
+│   │   ├── eventosAleatorios.js  # ~113 eventos aleatórios
+│   │   └── cards.js              # Cartas de decisão
+│   ├── game/
+│   │   ├── logic.js              # check, apply, nextDay, etc.
+│   │   └── cardsEngine.js        # makeCard, renderCard, swipe
+│   ├── ui/
+│   │   ├── render.js             # render, finish, confetti
+│   │   └── screens.js            # show, startGame, aurudo
+│   └── export.js                 # PNG share, save JSON, API POST
+├── test/
+│   └── test.js                   # Teste automatizado da API
+├── AGENTS.md
+└── README.md
+
+## Backend / API
+
+O servidor `server.js` serve os arquivos estáticos do jogo e expõe a API de resultados.
+
+### Endpoints
+
+- `POST /api/resultados` — Salva resultado (nome, turma, média, salário, modo, venceu)
+- `GET /api/resultados?chave=SECRET` — Ranking HTML (protegido por chave query)
+
+### Variáveis de ambiente
+
+| Variável | Descrição |
+|----------|-----------|
+| `DATABASE_URL` | Connection string PostgreSQL (Render fornece automaticamente) |
+| `RESULTADOS_KEY` | Chave para proteger GET /api/resultados |
+| `PORT` | Porta do servidor (padrão: 3000) |
+
+### Deploy no Render
+
+1. Push o código para um repositório GitHub
+2. No Render Dashboard, crie um **New Web Service** conectando ao repositório
+3. Build command: `npm install` — Start command: `node server.js`
+4. Crie um banco **PostgreSQL** gratuito no Render
+5. No Web Service, adicione as variáveis de ambiente:
+   - `DATABASE_URL` → cole a string do PostgreSQL criado
+   - `RESULTADOS_KEY` → defina uma chave secreta (ex: `segredo123`)
+6. Deploy. O frontend, API e banco ficam no mesmo serviço (sem CORS)
+7. Para ver o ranking: `https://seu-app.onrender.com/api/resultados?chave=segredo123`
 
 ## Numeros do Jogo
 
