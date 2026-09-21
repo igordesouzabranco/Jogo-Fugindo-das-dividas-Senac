@@ -219,11 +219,13 @@ function makeCard() {
     }, 800);
     return;
   } else if (S.day === 7) {
-    c = {t: "Conta de luz", d: "A conta de luz chegou. Ninguem quer ficar no escuro.", c: 50, e: {food: -5, lazer: 5, inv: -10}, fixed: true};
+    c = {t: "Conta de luz", d: "A conta de luz chegou. Bandeira tarifária subiu de novo — ninguém tanka essa inflação.", c: 35, e: {food: -3, lazer: -2, inv: -6}, fixed: true,
+      secret:SC(.20,S_("Aprendeu a economizar. Conta do mês que vem cai 40%. +aura.",{inv:5,food:3}),null)};
   } else if (S.day === 15) {
     c = {t: "Ajuda em casa", d: "Contribuição mensal pra ajudar em casa. Não pagar cria conversa.", c: 120, e: {food: -5, lazer: -7, inv: -7}, fixed: true};
   } else if (S.day === 25) {
-    c = {t: "Recarga do Spotify", d: "Não dá pegar o busão sem música.", c: 22, e: {food: -5, lazer: 5, inv: -9}, forced: true};
+    c = {t: "Recarga do Spotify", d: "Assinatura venceu. Sem música no busão é tipo ir de corpo sem alma.", c: 13, e: {food: -2, lazer: 4, inv: -4}, forced: true,
+      secret:SC(.25,S_("Playlist viralizou entre os parça. Farmou aura no algoritmo.",{inv:3,lazer:3},10),S_("Ficou ouvindo a mesma playlist por 3 meses seguidos. O algoritmo tá cringe.",{lazer:-4}))};
   } else {
     let available = cards.filter((_, i) => !usedCards.includes(i));
     if (available.length === 0) {
