@@ -82,8 +82,6 @@ function finish(reason) {
     });
   }
 
-  if (win) saveWinData();
-
   sendResultToServer({
     nome: S.name,
     turma: S.turma,

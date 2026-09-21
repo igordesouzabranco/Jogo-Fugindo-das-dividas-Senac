@@ -33,12 +33,12 @@ function roundRect(ctx, x, y, w, h, r) {
 function generateShareImage(data) {
   const canvas = document.createElement("canvas");
   canvas.width = 800;
-  canvas.height = 450;
+  canvas.height = 500;
   const ctx = canvas.getContext("2d");
 
   document.fonts.ready.then(() => {
     ctx.fillStyle = "#0f0f13";
-    ctx.fillRect(0, 0, 800, 450);
+    ctx.fillRect(0, 0, 800, 500);
 
     ctx.fillStyle = "#facc15";
     ctx.fillRect(0, 0, 800, 6);
@@ -53,11 +53,11 @@ function generateShareImage(data) {
     ctx.fillText("Simulação SENAC — 30 dias de sobrevivência financeira", 400, 78);
 
     ctx.fillStyle = "#18181f";
-    roundRect(ctx, 100, 110, 600, 270, 12);
+    roundRect(ctx, 100, 110, 600, 330, 12);
     ctx.fill();
     ctx.strokeStyle = "#facc15";
     ctx.lineWidth = 2;
-    roundRect(ctx, 100, 110, 600, 270, 12);
+    roundRect(ctx, 100, 110, 600, 330, 12);
     ctx.stroke();
 
     ctx.font = "bold 18px Inter, sans-serif";
@@ -86,7 +86,7 @@ function generateShareImage(data) {
     ctx.textAlign = "center";
     ctx.font = "11px Inter, sans-serif";
     ctx.fillStyle = "#333";
-    ctx.fillText("resultado_" + data.nome.replace(/\s+/g, "_") + ".png", 400, 425);
+    ctx.fillText("resultado_" + data.nome.replace(/\s+/g, "_") + ".png", 400, 470);
 
     const url = canvas.toDataURL("image/png");
     const a = document.createElement("a");
@@ -97,7 +97,6 @@ function generateShareImage(data) {
 }
 
 function sendResultToServer(data) {
-  console.trace("sendResultToServer chamado", data);
   return fetch("/api/resultados", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
