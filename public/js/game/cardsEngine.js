@@ -27,12 +27,17 @@ function showTiger() {
 }
 
 function showSecretToast(msg, isGood) {
-  const toast = document.createElement("div");
-  toast.className = "secret-toast " + (isGood ? "good" : "bad");
-  toast.innerHTML = "<span>" + (isGood ? '<i class="fa-solid fa-clover"></i>' : '<i class="fa-solid fa-skull"></i>') + "</span> " + msg;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.classList.add("show"), 10);
-  setTimeout(() => { toast.classList.remove("show"); setTimeout(() => toast.remove(), 400) }, 3500);
+  const banner = $("eventAnnouncement");
+  if (banner) {
+    banner.className = "event-announcement " + (isGood ? "good" : "bad") + " show";
+    banner.innerHTML = "<span>" + (isGood ? '<i class="fa-solid fa-star"></i> EVENTO BOM' : '<i class="fa-solid fa-triangle-exclamation"></i> EVENTO RUIM') + "</span> " + msg;
+    banner.style.display = "block";
+    clearTimeout(banner._hideTimer);
+    banner._hideTimer = setTimeout(() => {
+      banner.classList.remove("show");
+      setTimeout(() => { banner.style.display = "none"; banner.innerHTML = ""; }, 400);
+    }, 3500);
+  }
 }
 
 let _prevMouseMove = null;
@@ -271,11 +276,14 @@ function renderCard(c) {
     return '<span class="effect ' + (dv >= 0 ? "pos" : "neg") + '">' + (dv >= 0 ? "+" : "") + dv + " " + n + "</span>";
   }).join("");
 
+  const secretBadge = c.secret ? '<span class="tag secret-tag"><i class="fa-solid fa-wand-magic-sparkles"></i> Pode ativar evento secreto</span>' : '';
+
   $("card").innerHTML =
     (canAccept ? '<div class="swipe-overlay accept"><i class="fa-solid fa-check"></i> ACEITAR</div>' : '') +
     (canDeny ? '<div class="swipe-overlay deny"><i class="fa-solid fa-xmark"></i> NEGAR</div>' : '') +
     '<div class="card-content">' +
     '<span class="tag">DIA ' + S.day + (c.fixed ? " · EVENTO FIXO" : c.forced && S.tiger > 0 ? " · TIGRINHO" : c.forced ? " · OBRIGATÓRIO" : " · DECISÃO") + '</span>' +
+    secretBadge +
     (S.mode ? '<span class="diff-badge ' + S.mode + '">' + (S.mode === "hardcore" ? "HARDCORE" : "DIFÍCIL") + '</span>' : "") +
     "<h3>" + c.t + "</h3><p>" + c.d + "</p>" +
     '<div class="cost">' + (adjustedGain > 0 ? "Você ganha " + money(adjustedGain) : baseCost === 0 && c.c === 0 ? "Grátis" : "Custa " + money(adjustedCost)) + "</div>" +
@@ -308,9 +316,19 @@ function renderCard(c) {
       if (c.fixed && S.day === 15) {
         S.debt = false;
       }
-      if (c.secret && Math.random() < c.secret.chance) {
-        const r = Math.random() < 0.5;
-        const s = r ? c.secret.good : c.secret.bad;
+      if (c.secret) {
+        const roll = Math.random();
+        let s = null;
+        let isGood = false;
+        if (roll < 0.25) {
+          s = c.secret.good;
+          isGood = true;
+        } else if (roll < 0.50) {
+          s = c.secret.bad;
+          isGood = false;
+        } else {
+          s = null;
+        }
         if (s) {
           const isHC2 = S.mode === "hardcore";
           Object.entries(s.e || {}).forEach(([k, v]) => {
@@ -322,7 +340,7 @@ function renderCard(c) {
             const sg = Math.round(s.gain / (S.difficulty || 1));
             S.money += (isHC2 && sg < 10 ? 0 : sg);
           }
-          showSecretToast(s.msg, r);
+          showSecretToast(s.msg, isGood);
         }
       }
     }
