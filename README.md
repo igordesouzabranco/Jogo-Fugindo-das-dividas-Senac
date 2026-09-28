@@ -1,7 +1,6 @@
 # Fugindo das Dívidas
 
 Jogo educativo de simulação de sobrevivência financeira, desenvolvido para o SENAC.
-🎮 Jogue agora: https://jogo-fugindo-das-dividas-senac.onrender.com/
 
 ## O Jogo
 
